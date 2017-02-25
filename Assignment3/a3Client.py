@@ -35,8 +35,14 @@ def callServer():
     cSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # to make sure the connection doesn't hang       
     
     cSock.connect((hostname,port))
-    cSock.send(cipher + " test")
-    cSock.send(command + ' ' +  filename)
+    cSock.send(cipher + " test ")
+    data = cSock.recv(1024,0)    
+    if(data.upper() == "ack".upper()):
+        cSock.send(command + ' ' +  filename)
+    data = cSock.recv(1024,0)
+    print(data)
+    data = cSock.recv(1024,0)
+    print(data)
     
     
    

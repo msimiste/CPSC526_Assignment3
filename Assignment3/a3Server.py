@@ -41,9 +41,15 @@ def listenForClients():
         print("Using Secret Key: " + Key)
         print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + '   crypto: ')
         checkCipherAndIV(cli)
+        print("Line 44")
+        cli.send("ack")
+        print("Line 46")
         getCommand(cli)
+        print("Line 48")
+        cli.send("ack")
+        print("Line 50")
         executeCommand(cli)        
-        print("Line 45")
+        print("Line 52")
         #print(validateKey(cli,Key))
         
         
