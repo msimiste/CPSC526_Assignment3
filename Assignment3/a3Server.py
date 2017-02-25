@@ -12,6 +12,9 @@ import random
 import string
 
 BUFFER_SIZE = 4096
+READ = False
+FILENAME = ''
+
 def main():
     listenForClients()
     
@@ -27,8 +30,9 @@ def listenForClients():
         Port = int(sys.argv[1])         
         Key = sys.argv[2]
     cSock.bind(('', Port))            # Bind to the port
-    cSock.listen(5) # Now wait for client connection.                                
-       
+    cSock.listen(5) # Now wait for client connection.                        
+    
+   
     while True:
         print("Listening")  
         cli, addr = cSock.accept()       # Establish connection with client.             
@@ -37,17 +41,43 @@ def listenForClients():
         print("Using Secret Key: " + Key)
         print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + '   crypto: ')
         checkCipherAndIV(cli)
-        print(validateKey(cli,Key))
+        getCommand(cli)
+        executeCommand(cli)        
+        print("Line 45")
+        #print(validateKey(cli,Key))
+        
+        
+        #print(FILENAME)
         #if(validateKey(cli,Key))
             
         
 
+        
+        
+def readBlock(f):
+   return f.read(128)
+   
 def checkCipherAndIV(cli):
     data = cli.recv(BUFFER_SIZE,0)
     #print("Socket Started")
     data = data.decode('ascii')
     data = data.split()         
     print(data)
+
+#need to fix this such that it decrypts an incoming message properly
+#initially will be clear communication
+def getCommand(cli):
+    global READ
+    global FILENAME
+    print("Get Command:\n")
+    data = cli.recv(BUFFER_SIZE,0)
+    data = data.decode('ascii')
+    data = data.split()
+    if(data[0].upper() == 'read'.upper()):
+        READ = True    
+    FILENAME = str(data[1])
+    print(data)
+
 
 def validateKey(cliSock, Key):
     cliSock.send(bytearray('provide Key\n','ascii'))     
@@ -59,5 +89,21 @@ def validateKey(cliSock, Key):
         #if(clientKey == Key):
         #print("its a match")
         #print(clientKey)
+        
+def executeCommand(cli):    
+    print("Read = " + str(READ))
+    if(True):
+        print("Line 54")
+        with open(FILENAME, 'rb') as f:
+            data = f.read(128)
+            while data:                
+                cli.send(data)
+                data = f.read(128)
+            #print(data)
+        print("line99")
+      
+    elif(not READ):
+       test = 1
+        #do the stuff to write to a file
 if __name__ == '__main__':
     main()
