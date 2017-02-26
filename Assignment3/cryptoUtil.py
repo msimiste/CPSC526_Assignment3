@@ -1,4 +1,4 @@
-#!/usr/bin/python           # This is client.py file
+#!/usr/bin/python           # This is a helper class.py file
 
 #Name: Mike Simister
 #StudentID: 10095107
@@ -14,37 +14,65 @@ from Crypto.Cipher import AES
 
 
 class cryptoUtil(object):
-    condition = 'New'
-    def __init__(self,key,IV):
+    def __init__(self,key,IV, cipher):
         self.IV = IV
-        self.key = key
+        self.cipher = cipher
+        if(cipher.upper() == 'aes256'.upper()):
+            self.key = self.keyGen(32,key)
+            print("Line 25: " + self.key)
+        else:
+            self.key = self.keyGen(16, key)
+            print("Line 22: " + self.key)
+        
     def decrypt(self, block):
-        decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
+        #print("cryptoUtil decrypt blocksize :")
+        #print(len(block))
+        decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)        
         return decryptor.decrypt(block)
+        
     def encrypt(self,block):
+        print("cryptoUtil encrypt blocksize :")
+        print(len(block))
         encryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
         return encryptor.encrypt(block)
-
-#BUFFER_SIZE = 4096
-#READ = False
-#FILENAME = ''
-
-#def main():
-#    key = '0123456789abcdef' * 2
-#    IV =  '\x00\x03' * 8
-#    mode = AES.MODE_CBC
-##    encryptor = AES.new(key,mode,IV=IV)
-#    decryptor = AES.new(key,mode,IV=IV)
-#    text = 'a' * 128    
-#    ciphertext=encryptor.encrypt(text)
-#    print(text)
-#    print(ciphertext)
-#    decrypted = decryptor.decrypt(ciphertext)
-    #print('\n')
-    #for i in decrypted:
-        #print(i)
-#    print(decrypted)
         
+    def keyGen(self, length, block):
+        while(len(block) <> length):
+               if( len(block) < length):
+                   block += block
+               elif(len(block) > length):
+                   block = block[0:len(block)-1]
+        return block
+    
+    def addPadding(self, block):
+        length = len(block)
+        if(length % 16 == 0):
+            modVal = (16 - length % 16)-1
+        else:
+            modVal = (16 - length % 16) 
+        print(modVal)
+        #while((len(block) % 16) <> 0):
+         #   block += random.choice(string.letters + string.digits)
+        block += ''.join(random.choice(string.letters + string.digits) for i in range(modVal))
+        print("Crypto Util - line 48")
+        print(block)
+        #addedBytes = hex(modVal)
+        if(length % 16 <> 0):
+            block = block[:len(block)-1]
+            block += format(modVal,'02x')[1:]
+        else:
+            block += '0'
+        print(format(modVal,'02x')[1:])
+        
+        print("Crypto Util - line 64")
+        print(block)
+        return block
+        
+    def removePadding(self, block):
+        padVal = int(block[-1],16)
+        if(padVal == 0):
+            padVal = 16
+        return block[:-padVal]
 
-#if __name__ == '__main__':
-#    main()
+
+ 
