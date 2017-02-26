@@ -64,34 +64,38 @@ def callServer():
     data = cSock.recv(1024,0)    
     if(data.upper() == "ack".upper()):
         cSock.send(command + ' ' +  filename)
-    data = cSock.recv(1024,0)
+    
+    receiveFile(cSock, client)
+    #data = cSock.recv(1024,0)
     print("Client Line 68:")
     #print(len(data))
-    data = client.decryptor.decrypt(data)
+    #data = client.decryptor.decrypt(data)
     #print(data1)
-    data = client.decryptor.removePadding(data)
-    print(data)
-    #data = cSock.recv(1024,0)
+    #data = client.decryptor.removePadding(data)
     #print(data)
-    #
-   
-    #while True:
-     #   print("Listening")  
-      ## sSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
-        #sSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
-        #print("Using Secret Key: " + Key)
-   #     print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + '   crypto: ')
-   #     checkCipherAndIV(cli)
-    #    getCommand(cli)
-     #   executeCommand(cli)        
-      #  print("Line 45")
-        #print(validateKey(cli,Key))
-        
-        
-        #print(FILENAME)
-        #if(validateKey(cli,Key))
+  
             
-        
+def receiveFile(cSock, client):
+    keepGoing = True 
+    dataOut = ''   
+    try:
+        while keepGoing:
+            data = cSock.recv(BUFFER_SIZE,0)                                     
+            dataOut += data
+            if not data:
+                print(": line 86")
+                cSock.close()
+                keepGoing = False
+        dataOut = client.decryptor.decrypt(dataOut)
+        dataOut = client.decryptor.removePadding(dataOut)    
+        print(dataOut)
+                                                          
+    except socket.error as t:
+        if t.errno == errno.EPIPE:
+            print("Client Closed")
+            keepGoing = False
+                
+                
 def testInputs(command, filename, hostname, port, cipher, key):
     print(command)
     print(filename)
