@@ -32,6 +32,12 @@ class a3Server(object):
         
     def setFileName(self, name):
         self.FILENAME = name
+    
+    def parseCommand(self):
+        if(self.READ):
+            return 'read'
+        else:
+            return 'write'
         
     def listenForClients(self):
         
@@ -50,24 +56,26 @@ class a3Server(object):
         
        
         while True:
-            print("Listening")  
+            print("Listening on port " + str(Port))  
             cli, addr = cSock.accept()       # Establish connection with client.             
             sSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
             sSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
             print("Using Secret Key: " + Key)
-            print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + '   crypto: ')
+            print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher)
             self.checkCipherAndIV(cli)
             self.setCrypto()
-            print("Line 44")
-            cli.send("ack")
+            #print("Line 44")
+            ack = self.encryptor.addPadding('ack')
+            ack = self.encryptor.encrypt(ack)
+            cli.send(ack)
             #cli.send(self.encryptor.encrypt('ack'))
-            print("Line 46")
+            #print("Line 46")
             self.getCommand(cli)
-            print("Line 48")
+            #print("Line 48")
             #cli.send("ack")
-            print("Line 50")
+            #print("Line 50")
             self.executeCommand(cli)        
-            print("Line 52")
+            #print("Line 52")
     
     #need to fix this such that it decrypts an incoming message properly
     #initially will be clear communication        
@@ -91,23 +99,29 @@ class a3Server(object):
     def getCommand(self,cli):
         #global READ
         #global FILENAME
-        print("Get Command:\n")
+        #print("Get Command:\n")
         data = cli.recv(BUFFER_SIZE,0)
+        #print("Line 98: ")
+        #print(data)
+        data = self.decryptor.decrypt(data)
+        #print(data)
+        data = self.decryptor.removePadding(data)
         data = data.decode('ascii')
         data = data.split()
         if(data[0].upper() == 'read'.upper()):
             self.READ = True    
                 
         self.setFileName(str(data[1]))
-        print(data)
+        print(time.strftime('%H:%M:%S:') + ' command: ' + self.parseCommand() + ' ' + self.FILENAME)
+        #print(data)
         
     def executeCommand(self, cli):    
-        print("Read = " + str(self.READ))
+        #print("Read = " + str(self.READ))
         data = ''
         if(self.READ):
             #print("Line 105")
             fileSize = os.stat(self.FILENAME).st_size
-            print(fileSize)
+           #print(fileSize)
             with open(self.FILENAME, 'rb') as f:
                 while(f.tell() < fileSize):
                     data += f.read()
@@ -118,45 +132,21 @@ class a3Server(object):
                     #print(len(data))
                     #print(data)
                 cli.send(data)
-                cli.close()
-                
+                cli.close()         
         #print("line 119")
       
         elif(not self.READ):
             test = 1
             #do the stuff to write to a file
+        print(time.strftime('%H:%M:%S:') + ' done')
 
 
 def main():
     serv = a3Server('aes128','testIV', 'testKey')
     serv.listenForClients()
     
-
-       
+    
         
-def readBlock(f):
-   return f.read(128)
-   
-#def checkCipherAndIV(cli):
-    #data = cli.recv(BUFFER_SIZE,0)
-    ##print("Socket Started")
-    #data = data.decode('base64')
-    #data = data.split()         
-    #print(data)
-
-##need to fix this such that it decrypts an incoming message properly
-##initially will be clear communication
-#def getCommand(cli):
-    #global READ
-    #global FILENAME
-    #print("Get Command:\n")
-    #data = cli.recv(BUFFER_SIZE,0)
-    #data = data.decode('ascii')
-    #data = data.split()
-    #if(data[0].upper() == 'read'.upper()):
-        #READ = True    
-    #FILENAME = str(data[1])
-    #print(data)
 
 
 def validateKey(cliSock, Key):

@@ -19,10 +19,10 @@ class cryptoUtil(object):
         self.cipher = cipher
         if(cipher.upper() == 'aes256'.upper()):
             self.key = self.keyGen(32,key)
-            print("Line 25: " + self.key)
+            #print("Line 25: " + self.key)
         else:
             self.key = self.keyGen(16, key)
-            print("Line 22: " + self.key)
+            #print("Line 22: " + self.key)
         
     def decrypt(self, block):
         #print("cryptoUtil decrypt blocksize :")
@@ -31,8 +31,8 @@ class cryptoUtil(object):
         return decryptor.decrypt(block)
         
     def encrypt(self,block):
-        print("cryptoUtil encrypt blocksize :")
-        print(len(block))
+        #print("cryptoUtil encrypt blocksize :")
+        #print(len(block))
         encryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
         return encryptor.encrypt(block)
         
@@ -50,22 +50,22 @@ class cryptoUtil(object):
             modVal = (16 - length % 16)-1
         else:
             modVal = (16 - length % 16) 
-        print(modVal)
+        #print(modVal)
         #while((len(block) % 16) <> 0):
          #   block += random.choice(string.letters + string.digits)
         block += ''.join(random.choice(string.letters + string.digits) for i in range(modVal))
-        print("Crypto Util - line 48")
-        print(block)
+        #print("Crypto Util - line 48")
+        #print(block)
         #addedBytes = hex(modVal)
         if(length % 16 <> 0):
             block = block[:len(block)-1]
             block += format(modVal,'02x')[1:]
         else:
             block += '0'
-        print(format(modVal,'02x')[1:])
+        #print(format(modVal,'02x')[1:])
         
-        print("Crypto Util - line 64")
-        print(block)
+        #print("Crypto Util - line 64")
+        #print(block)
         return block
         
     def removePadding(self, block):

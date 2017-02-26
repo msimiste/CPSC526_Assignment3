@@ -24,11 +24,21 @@ class a3Client(object):
         self.cipher = cipher
         self.IV = IV
         self.key = key
-    
+            
     def setCrypto(self):
         self.decryptor = cryptoUtil(self.key, self.IV, self.cipher)
         self.encryptor = cryptoUtil(self.key, self.IV, self.cipher)
-
+    
+    def setRead(self,read):
+        self.READ = read
+    
+    def setParams(self, command, filename, host, port):
+        self.command = command
+        self.filename = filename
+        self.host = host
+        self.port = port
+        
+        
 def main():
     callServer()
     
@@ -41,39 +51,40 @@ def callServer():
     port = int(host_port[1])
     cipher = sys.argv[4]
     IV =  b64encode(os.urandom(16))
-    print("Line 32:")
-    print(len(IV))
-    print (b64decode(IV))
+    #print("Line 32:")
+    #print(len(IV))
+    #print (b64decode(IV))
     if(cipher.upper() <> "none".upper()):
         key = sys.argv[5]
     
-    testInputs(command, filename, hostname, port, cipher, key)
+    #testInputs(command, filename, hostname, port, cipher, key)
         
     cSock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)             # Create a socket object
     cSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # to make sure the connection doesn't hang       
     client = a3Client(cipher,b64decode(IV),key)
     client.setCrypto()
+    client.setParams(command,filename,hostname,port)
     cSock.connect((hostname,port))
     cSock.send(cipher)
+    
     #need to encrypt/decrypt acks securely or determine
     #some type of workaround for this issue
     data = cSock.recv(1024,0)
     if(data.upper() == 'ack'.upper()):
         cSock.send(IV)
-        
-    data = cSock.recv(1024,0)    
-    if(data.upper() == "ack".upper()):
-        cSock.send(command + ' ' +  filename)
-    
-    receiveFile(cSock, client)
-    #data = cSock.recv(1024,0)
-    print("Client Line 68:")
-    #print(len(data))
-    #data = client.decryptor.decrypt(data)
-    #print(data1)
-    #data = client.decryptor.removePadding(data)
+                
+    data = cSock.recv(1024,0)  
+    #print("line 77 :")    
+    data = client.decryptor.decrypt(data)
     #print(data)
-  
+    data = client.decryptor.removePadding(data)  
+    if(data.upper() == "ack".upper()):
+        msg = client.encryptor.addPadding(command + ' '+ filename)
+        msg = client.encryptor.encrypt(msg)
+        #cSock.send(command + ' ' +  filename)
+        cSock.send(msg)
+    receiveFile(cSock, client)
+    #print("Client Line 68:")  
             
 def receiveFile(cSock, client):
     keepGoing = True 
@@ -83,12 +94,14 @@ def receiveFile(cSock, client):
             data = cSock.recv(BUFFER_SIZE,0)                                     
             dataOut += data
             if not data:
-                print(": line 86")
+                #print(": line 86")
                 cSock.close()
                 keepGoing = False
         dataOut = client.decryptor.decrypt(dataOut)
         dataOut = client.decryptor.removePadding(dataOut)    
-        print(dataOut)
+        sys.stdout.write(dataOut)
+        sys.stdout.flush()
+        
                                                           
     except socket.error as t:
         if t.errno == errno.EPIPE:
