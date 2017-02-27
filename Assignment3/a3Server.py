@@ -136,8 +136,29 @@ class a3Server(object):
         #print("line 119")
       
         elif(not self.READ):
-            test = 1
-            #do the stuff to write to a file
+            #with open(cli.recv(BUFFER_SIZE,0),'rb') as f:
+                #while(f):
+                    #data += f.read()
+            
+            print("line 143")     
+            print(data)  
+            #ack = self.encryptor.addPadding('ack')
+            ##ack = self.encryptor.encrypt(ack)
+            #cli.send(ack)
+            keepGoing = True
+            dataOut = ''
+            while keepGoing:
+                print("line 142")
+                data = cli.recv(BUFFER_SIZE,0)                                     
+                dataOut += data
+                if not data:
+                    print(": line 86")
+                #c.close()
+                    keepGoing = False
+            dataOut = self.decryptor.decrypt(dataOut)
+            dataOut = self.decryptor.removePadding(dataOut)    
+            sys.stdout.write(dataOut)
+            #sys.stdout.flush()
         print(time.strftime('%H:%M:%S:') + ' done')
 
 

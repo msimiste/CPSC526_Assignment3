@@ -34,6 +34,10 @@ class a3Client(object):
     
     def setParams(self, command, filename, host, port):
         self.command = command
+        if(command.upper() == 'read'.upper()):
+            self.setRead(True)
+        else:
+            self.setRead(False)
         self.filename = filename
         self.host = host
         self.port = port
@@ -83,7 +87,10 @@ def callServer():
         msg = client.encryptor.encrypt(msg)
         #cSock.send(command + ' ' +  filename)
         cSock.send(msg)
-    receiveFile(cSock, client)
+    if(client.READ):
+        receiveFile(cSock, client)
+    else:
+        sendFile(cSock,client)
     #print("Client Line 68:")  
             
 def receiveFile(cSock, client):
@@ -107,8 +114,17 @@ def receiveFile(cSock, client):
         if t.errno == errno.EPIPE:
             print("Client Closed")
             keepGoing = False
-                
-                
+            
+def sendFile(cSock,client):
+    #while(sys.stdin):
+    tempFile = sys.stdin.read()
+    tempFile = client.encryptor.addPadding(tempFile)
+    tempFile = client.encryptor.encrypt(tempFile)
+    print(tempFile)
+    cSock.send(tempFile)
+    #print("line 119")
+    #print(sys.stdin)
+    
 def testInputs(command, filename, hostname, port, cipher, key):
     print(command)
     print(filename)
