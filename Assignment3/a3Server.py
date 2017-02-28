@@ -15,8 +15,6 @@ from base64 import b64encode, b64decode
 from cryptoUtil import cryptoUtil
 
 BUFFER_SIZE = 4096
-#READ = False
-#FILENAME = ''
 
 class a3Server(object):
     def __init__(self, cipher, IV, key):
@@ -25,6 +23,7 @@ class a3Server(object):
         self.key = key
         self.READ = False
         self.FILENAME = ''
+        
     
     def setCrypto(self):
         self.decryptor = cryptoUtil(self.key, self.IV, self.cipher)
@@ -38,6 +37,9 @@ class a3Server(object):
             return 'read'
         else:
             return 'write'
+    
+    def setCipher(self):
+        self.UseCipher = (self.cipher.upper() <> "none".upper())
         
     def listenForClients(self):
         
@@ -61,22 +63,22 @@ class a3Server(object):
             sSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
             sSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
             print("Using Secret Key: " + Key)
-            print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher)
+           
+            
             self.checkCipherAndIV(cli)
             self.setCrypto()
-            #print("Line 44")
-            ack = self.encryptor.addPadding('ack')
-            ack = self.encryptor.encrypt(ack)
+            if(self.UseCipher):
+                print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher + ' IV: ' + b64encode(self.IV))
+            else:
+                print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher)
+            ack = 'ack'
+            if(self.cipher.upper() <> "none".upper()):
+                ack = self.encryptor.addPadding(ack)
+                ack = self.encryptor.encrypt(ack)
             cli.send(ack)
-            #cli.send(self.encryptor.encrypt('ack'))
-            #print("Line 46")
             self.getCommand(cli)
-            #print("Line 48")
-            #cli.send("ack")
-            #print("Line 50")
             self.executeCommand(cli)        
-            #print("Line 52")
-    
+                
     #need to fix this such that it decrypts an incoming message properly
     #initially will be clear communication        
     def checkCipherAndIV(self, cli):
@@ -87,83 +89,70 @@ class a3Server(object):
         cli.send('ack')
         data = cli.recv(BUFFER_SIZE,0)
         self.IV = b64decode(data)
-        #data = data.split()         
-        #self.cipher = data[0]
-        #self.IV = data[1]
-        #print("Line 71: ")
-        #print(len(self.IV))
-        #print(self.IV)
-    
+        self.setCipher()
+            
     #need to fix this such that it decrypts an incoming message properly
     #initially will be clear communication
     def getCommand(self,cli):
-        #global READ
-        #global FILENAME
-        #print("Get Command:\n")
         data = cli.recv(BUFFER_SIZE,0)
-        #print("Line 98: ")
-        #print(data)
-        data = self.decryptor.decrypt(data)
-        #print(data)
-        data = self.decryptor.removePadding(data)
+        if(self.cipher.upper() <> "none".upper()):
+            data = self.decryptor.decrypt(data)
+            data = self.decryptor.removePadding(data)
+        
+        print(data)
         data = data.decode('ascii')
         data = data.split()
+        
         if(data[0].upper() == 'read'.upper()):
             self.READ = True    
                 
         self.setFileName(str(data[1]))
+        ack=('ack')
+        if(self.cipher.upper() <> 'none'.upper()):
+            ack = self.encryptor.addPadding(ack)
+            ack = self.encryptor.encrypt(ack)
+        cli.send(ack)
         print(time.strftime('%H:%M:%S:') + ' command: ' + self.parseCommand() + ' ' + self.FILENAME)
-        #print(data)
         
-    def executeCommand(self, cli):    
-        #print("Read = " + str(self.READ))
+    def executeCommand(self, cli):  
+        #cli.send('ack')  
         data = ''
         if(self.READ):
-            #print("Line 105")
             fileSize = os.stat(self.FILENAME).st_size
-           #print(fileSize)
             with open(self.FILENAME, 'rb') as f:
                 while(f.tell() < fileSize):
                     data += f.read()
-                data = self.encryptor.addPadding(data)
-                    #print("line 110")
-                    #print(len(data))
-                data = self.encryptor.encrypt(data)
-                    #print(len(data))
-                    #print(data)
+                if(self.cipher.upper() <> "none".upper()):
+                    data = self.encryptor.addPadding(data)                   
+                    data = self.encryptor.encrypt(data)                    
                 cli.send(data)
                 cli.close()         
-        #print("line 119")
-      
+              
         elif(not self.READ):
-            #with open(cli.recv(BUFFER_SIZE,0),'rb') as f:
-                #while(f):
-                    #data += f.read()
-            
-            print("line 143")     
-            print(data)  
-            #ack = self.encryptor.addPadding('ack')
-            ##ack = self.encryptor.encrypt(ack)
-            #cli.send(ack)
             keepGoing = True
             dataOut = ''
             while keepGoing:
-                print("line 142")
+                #print("line 142")
                 data = cli.recv(BUFFER_SIZE,0)                                     
                 dataOut += data
                 if not data:
-                    print(": line 86")
-                #c.close()
+                   #print(": line 86")
                     keepGoing = False
-            dataOut = self.decryptor.decrypt(dataOut)
-            dataOut = self.decryptor.removePadding(dataOut)    
-            sys.stdout.write(dataOut)
-            #sys.stdout.flush()
+            if(self.cipher.upper() <> "none".upper()):
+                dataOut = self.decryptor.decrypt(dataOut)
+                dataOut = self.decryptor.removePadding(dataOut)    
+            
+            fileOut = open(self.FILENAME,'w')
+            fileOut.write(dataOut)
+            fileOut.flush()
+            fileOut.close()
+            #sys.stdout.write(dataOut)
+        cli.close()    
         print(time.strftime('%H:%M:%S:') + ' done')
 
 
 def main():
-    serv = a3Server('aes128','testIV', 'testKey')
+    serv = a3Server('none','none', 'testKey')
     serv.listenForClients()
     
     

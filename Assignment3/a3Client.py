@@ -11,6 +11,8 @@ import time
 import random
 import string
 import os
+from Crypto import Random
+from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 from cryptoUtil import cryptoUtil
 
@@ -24,6 +26,7 @@ class a3Client(object):
         self.cipher = cipher
         self.IV = IV
         self.key = key
+        self.UseCipher = (self.cipher.upper() <> "none".upper())
             
     def setCrypto(self):
         self.decryptor = cryptoUtil(self.key, self.IV, self.cipher)
@@ -55,19 +58,26 @@ def callServer():
     port = int(host_port[1])
     cipher = sys.argv[4]
     IV =  b64encode(os.urandom(16))
+    #IV = Random.new().read(AES.block_size)
     #print("Line 32:")
     #print(len(IV))
+    #print(IV)
     #print (b64decode(IV))
     if(cipher.upper() <> "none".upper()):
         key = sys.argv[5]
+    else:
+        key = "none"
+    
+    client = a3Client(cipher,b64decode(IV),key)
+    #client = a3Client(cipher,IV,key)
+    client.setCrypto()
+    client.setParams(command,filename,hostname,port)
     
     #testInputs(command, filename, hostname, port, cipher, key)
         
     cSock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)             # Create a socket object
     cSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # to make sure the connection doesn't hang       
-    client = a3Client(cipher,b64decode(IV),key)
-    client.setCrypto()
-    client.setParams(command,filename,hostname,port)
+    
     cSock.connect((hostname,port))
     cSock.send(cipher)
     
@@ -78,22 +88,33 @@ def callServer():
         cSock.send(IV)
                 
     data = cSock.recv(1024,0)  
-    #print("line 77 :")    
-    data = client.decryptor.decrypt(data)
-    #print(data)
-    data = client.decryptor.removePadding(data)  
+    if(client.UseCipher):
+        data = client.decryptor.decrypt(data)
+        data = client.decryptor.removePadding(data)  
+    
     if(data.upper() == "ack".upper()):
-        msg = client.encryptor.addPadding(command + ' '+ filename)
-        msg = client.encryptor.encrypt(msg)
-        #cSock.send(command + ' ' +  filename)
+        msg = (command +  ' ' + filename)
+        if(client.cipher.upper() <> "none".upper()):
+            msg = client.encryptor.addPadding(msg)
+            msg = client.encryptor.encrypt(msg)
         cSock.send(msg)
+        
     if(client.READ):
         receiveFile(cSock, client)
     else:
         sendFile(cSock,client)
-    #print("Client Line 68:")  
+      
             
 def receiveFile(cSock, client):
+    if(client.UseCipher):
+       testAck = cSock.recv(16,0)
+       testAck = client.decryptor.decrypt(testAck)
+       testAck = client.decryptor.removePadding(testAck)
+       
+    else:
+        testAck = cSock.recv(3,0)
+    
+    #print("line112")
     keepGoing = True 
     dataOut = ''   
     try:
@@ -104,8 +125,9 @@ def receiveFile(cSock, client):
                 #print(": line 86")
                 cSock.close()
                 keepGoing = False
-        dataOut = client.decryptor.decrypt(dataOut)
-        dataOut = client.decryptor.removePadding(dataOut)    
+        if(client.cipher.upper() <> "none".upper()):
+            dataOut = client.decryptor.decrypt(dataOut)
+            dataOut = client.decryptor.removePadding(dataOut)    
         sys.stdout.write(dataOut)
         sys.stdout.flush()
         
@@ -115,15 +137,19 @@ def receiveFile(cSock, client):
             print("Client Closed")
             keepGoing = False
             
-def sendFile(cSock,client):
-    #while(sys.stdin):
-    tempFile = sys.stdin.read()
-    tempFile = client.encryptor.addPadding(tempFile)
-    tempFile = client.encryptor.encrypt(tempFile)
-    print(tempFile)
+def sendFile(cSock,client): 
+    data = cSock.recv(BUFFER_SIZE,0)
+    if(client.UseCipher):
+            data = client.decryptor.decrypt(data)
+            data = client.decryptor.removePadding(data)
+    if(data.upper() == 'ack'.upper()):
+        tempFile = sys.stdin.read()
+        
+    #sys.stdin.flush()
+    if(client.cipher.upper() <> "none".upper()):
+        tempFile = client.encryptor.addPadding(tempFile)
+        tempFile = client.encryptor.encrypt(tempFile)
     cSock.send(tempFile)
-    #print("line 119")
-    #print(sys.stdin)
     
 def testInputs(command, filename, hostname, port, cipher, key):
     print(command)
