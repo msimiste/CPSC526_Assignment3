@@ -15,6 +15,8 @@ from Crypto import Random
 from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 from cryptoUtil import cryptoUtil
+import hashlib
+
 
 BUFFER_SIZE = 4096
 READ = False
@@ -86,8 +88,12 @@ def callServer():
     data = cSock.recv(1024,0)
     if(data.upper() == 'ack'.upper()):
         cSock.send(IV)
-                
-    data = cSock.recv(1024,0)  
+       
+    verifyKey(cSock, client)
+    #send a message to test the encryption
+    #print("line 94")
+    data = cSock.recv(1024,0) 
+    #print("line 95") 
     if(client.UseCipher):
         data = client.decryptor.decrypt(data)
         data = client.decryptor.removePadding(data)  
@@ -103,7 +109,23 @@ def callServer():
         receiveFile(cSock, client)
     else:
         sendFile(cSock,client)
-      
+
+def verifyKey(cSock, client):
+    hashTest = hashlib.md5()
+    message = string.lowercase+string.digits+string.uppercase
+    message = ''.join(random.sample(message,31))
+    #print(message)
+    hashTest.update(message)
+    message = 'message'
+    #print(message.encode("hex"))
+    message += hashTest.hexdigest();
+    data = client.encryptor.addPadding(message)
+    data = client.encryptor.encrypt(data)
+    cSock.send(data)
+    #retValue = cSock.recv(BUFFER_SIZE,0)
+    #retValue = client.decryptor.decrypt(retValue)
+    #retValue = client.decryptor.removePadding(retValue);
+    #print("RetValue: " +retValue)
             
 def receiveFile(cSock, client):
     if(client.UseCipher):

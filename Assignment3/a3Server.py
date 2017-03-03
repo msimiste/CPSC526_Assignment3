@@ -13,6 +13,8 @@ import string
 import os
 from base64 import b64encode, b64decode
 from cryptoUtil import cryptoUtil
+import hashlib
+import hmac
 
 BUFFER_SIZE = 4096
 
@@ -63,11 +65,11 @@ class a3Server(object):
             sSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
             sSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
             print("Using Secret Key: " + Key)
-           
-            
             self.checkCipherAndIV(cli)
+            #self.validateKey(cli)
             self.setCrypto()
-            if(self.UseCipher):
+            if(self.UseCipher):                
+                self.validateKey(cli)
                 print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher + ' IV: ' + b64encode(self.IV))
             else:
                 print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher)
@@ -75,9 +77,13 @@ class a3Server(object):
             if(self.cipher.upper() <> "none".upper()):
                 ack = self.encryptor.addPadding(ack)
                 ack = self.encryptor.encrypt(ack)
+            #print("line 80")
             cli.send(ack)
+            #print("line 82")
             self.getCommand(cli)
-            self.executeCommand(cli)        
+            #print("line 84")
+            self.executeCommand(cli)  
+            #print("line 84")      
                 
     #need to fix this such that it decrypts an incoming message properly
     #initially will be clear communication        
@@ -142,13 +148,34 @@ class a3Server(object):
                 dataOut = self.decryptor.decrypt(dataOut)
                 dataOut = self.decryptor.removePadding(dataOut)    
             
-            fileOut = open(self.FILENAME,'w')
+            fileOut = open(self.FILENAME,'w+')
             fileOut.write(dataOut)
             fileOut.flush()
             fileOut.close()
             #sys.stdout.write(dataOut)
         cli.close()    
         print(time.strftime('%H:%M:%S:') + ' done')
+    
+    def validateKey(self, cli):
+        
+        data = cli.recv(BUFFER_SIZE,0)
+        data = self.decryptor.decrypt(data)
+        data = self.decryptor.removePadding(data)
+        msgLength = len(data) - 32
+        msg = data[:msgLength]
+        hashOfMsg = data[msgLength:]
+        hashCheck = hashlib.md5()
+        hashCheck.update(msg)
+        hashCheck = hashCheck.hexdigest()
+        #print(hashCheck)
+        #print(data)
+        #print(msg)
+        #print(hashOfMsg)
+        
+        #print(hmac.compare_digest(hashOfMsg,hashCheck))
+        ack  = 'ack'
+        ack = self.encryptor.addPadding(ack)
+        ack = self.encryptor.encrypt(ack)
 
 
 def main():
@@ -159,16 +186,7 @@ def main():
         
 
 
-def validateKey(cliSock, Key):
-    cliSock.send(bytearray('provide Key\n','ascii'))     
-    data = cliSock.recv(BUFFER_SIZE,0)
-    clientKey = data.decode('ascii').strip()
-    return clientKey == Key 
-    #debug messages
-    #print(clientKey == Key)
-        #if(clientKey == Key):
-        #print("its a match")
-        #print(clientKey)
+
         
 
 if __name__ == '__main__':
