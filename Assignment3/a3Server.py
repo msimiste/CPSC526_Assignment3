@@ -60,15 +60,20 @@ class a3Server(object):
         
        
         while True:
-            print("Listening on port " + str(Port))  
+            print("Listening on port " + str(Port)) 
+            print(self.key) 
+            print("Using Secret Key: " + Key)
+            self.key = Key
+            print(self.key)
             cli, addr = cSock.accept()       # Establish connection with client.             
             sSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
             sSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
-            print("Using Secret Key: " + Key)
+            
             self.checkCipherAndIV(cli)
             #self.validateKey(cli)
             self.setCrypto()
-            if(self.UseCipher):                
+            if(self.UseCipher):
+                print("line 73")                
                 self.validateKey(cli)
                 print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher + ' IV: ' + b64encode(self.IV))
             else:
@@ -77,14 +82,11 @@ class a3Server(object):
             if(self.cipher.upper() <> "none".upper()):
                 ack = self.encryptor.addPadding(ack)
                 ack = self.encryptor.encrypt(ack)
-            #print("line 80")
+            
             cli.send(ack)
-            #print("line 82")
             self.getCommand(cli)
-            #print("line 84")
             self.executeCommand(cli)  
-            #print("line 84")      
-                
+                            
     #need to fix this such that it decrypts an incoming message properly
     #initially will be clear communication        
     def checkCipherAndIV(self, cli):
@@ -160,6 +162,7 @@ class a3Server(object):
         
         data = cli.recv(BUFFER_SIZE,0)
         data = self.decryptor.decrypt(data)
+        print(data)
         data = self.decryptor.removePadding(data)
         msgLength = len(data) - 32
         msg = data[:msgLength]
@@ -167,12 +170,6 @@ class a3Server(object):
         hashCheck = hashlib.md5()
         hashCheck.update(msg)
         hashCheck = hashCheck.hexdigest()
-        #print(hashCheck)
-        #print(data)
-        #print(msg)
-        #print(hashOfMsg)
-        
-        #print(hmac.compare_digest(hashOfMsg,hashCheck))
         ack  = 'ack'
         ack = self.encryptor.addPadding(ack)
         ack = self.encryptor.encrypt(ack)

@@ -70,9 +70,20 @@ def main():
     
     print(m2)
     print(hmac.compare_digest(hashVal,m3.hexdigest()))
-    
+    #print(os.getcwd())
+    fileName = sys.argv[1]
+    getFileSize(fileName)
     #keyGenTest()
-        
+
+def getFileSize(fileName):
+    path = os.getcwd() + "/" + fileName
+    print (path)
+    print(os.path.getsize(path))
+    print(os.system('df -k /'))
+    s = os.statvfs('/')
+    temp = (s.f_bavail * s.f_frsize)  / 1024
+    print(temp)
+    
 
 def keyGenTest():
     dec = cryptoUtil(key,IV)
