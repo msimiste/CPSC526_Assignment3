@@ -108,7 +108,7 @@ def callServer():
     if(client.READ):
         receiveFile(cSock, client)
     else:
-        sendFile(cSock,client)
+        sendFile(cSock,client,filename)
 
 def verifyKey(cSock, client):
     hashTest = hashlib.md5()
@@ -159,12 +159,19 @@ def receiveFile(cSock, client):
             print("Client Closed")
             keepGoing = False
             
-def sendFile(cSock,client): 
+def sendFile(cSock,client,filename): 
     data = cSock.recv(BUFFER_SIZE,0)
     if(client.UseCipher):
             data = client.decryptor.decrypt(data)
             data = client.decryptor.removePadding(data)
     if(data.upper() == 'ack'.upper()):
+        path = os.getcwd() + "/" + filename
+        #print (path)
+        print(os.path.getsize(path))
+        #print(os.system('df -k /'))
+        s = os.statvfs('/')
+        temp = (s.f_bavail * s.f_frsize)  / 1024
+        print(temp)
         tempFile = sys.stdin.read()
         
     #sys.stdin.flush()
