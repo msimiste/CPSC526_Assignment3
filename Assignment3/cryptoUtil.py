@@ -27,12 +27,18 @@ class cryptoUtil(object):
     def decrypt(self, block):
         #print("cryptoUtil decrypt blocksize :")
         #print(len(block))
-        decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)        
-        return decryptor.decrypt(block)
+        #print("block: " + block)
+        decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)  
+        block = decryptor.decrypt(block)
+        #print("block: " + block)
+        return self.simpleUnPad(block)
+        #return decryptor.decrypt(block)
         
     def encrypt(self,block):
         #print("cryptoUtil encrypt blocksize :")
         #print(len(block))
+        #print("line40: " + block)
+        block = self.simplePad(block)
         encryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
         return encryptor.encrypt(block)
         
@@ -74,5 +80,14 @@ class cryptoUtil(object):
             padVal = 16
         return block[:-padVal]
 
-
- 
+    def simplePad(self, block):
+        BS = 16
+        #print("Line 84 "  + block)
+        pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
+        block =  pad(block)
+        #print("line 86 " + block)
+        return block
+        
+    def simpleUnPad(self, block):
+        unpad = lambda s : s[0:-ord(s[-1])]
+        return unpad(block)

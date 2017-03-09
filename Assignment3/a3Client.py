@@ -16,6 +16,7 @@ from Crypto.Cipher import AES
 from base64 import b64encode, b64decode
 from cryptoUtil import cryptoUtil
 import hashlib
+import hmac
 
 
 BUFFER_SIZE = 4096
@@ -96,14 +97,16 @@ def callServer():
     #print("line 95") 
     if(client.UseCipher):
         data = client.decryptor.decrypt(data)
-        data = client.decryptor.removePadding(data)  
+        #data = client.decryptor.removePadding(data)  
     
     if(data.upper() == "ack".upper()):
         msg = (command +  ' ' + filename)
         if(client.cipher.upper() <> "none".upper()):
-            msg = client.encryptor.addPadding(msg)
+            #msg = client.encryptor.addPadding(msg)
             msg = client.encryptor.encrypt(msg)
         cSock.send(msg)
+    else:
+        print("problem with Key")
         
     if(client.READ):
         receiveFile(cSock, client)
@@ -116,22 +119,46 @@ def verifyKey(cSock, client):
     message = ''.join(random.sample(message,31))
     #print(message)
     hashTest.update(message)
-    message = 'message'
+    #message = 'message'
     #print(message.encode("hex"))
     message += hashTest.hexdigest();
-    data = client.encryptor.addPadding(message)
-    data = client.encryptor.encrypt(data)
-    cSock.send(data)
-    #retValue = cSock.recv(BUFFER_SIZE,0)
+    #data = client.encryptor.addPadding(message)
+    #print("message: " + message)
+    data = client.encryptor.encrypt(message)
+    
+    try:
+        cSock.send(data)
+        testData = cSock.recv(1024,0)
+        testData = client.decryptor.decrypt(testData)
+        #data = self.decryptor.removePadding(data)
+        msgLength = len(testData) - 32
+        msg = testData[:msgLength]
+        print("client side msg " + msg)
+        hashOfMsg = testData[msgLength:]
+        hashCheck = hashlib.md5()
+        print("client side hashCheck1: "  + str(hashCheck))
+        hashCheck.update(msg)
+        print("client side hashCheck2: "  + hashCheck.hexdigest())
+        hashCheck = hashCheck.hexdigest()
+        validKey = hmac.compare_digest(hashCheck,hashOfMsg)
+        print("Client side, key is valid: " + str(validKey))
+        
+        if(not validKey):
+            cSock.close()
+            sys.exit(0)
+    except ValueError as e:
+        if(e.message == "Exception: The Key is Invalid"):
+            print("caught error")
+             #retValue = cSock.recv(BUFFER_SIZE,0)
     #retValue = client.decryptor.decrypt(retValue)
-    #retValue = client.decryptor.removePadding(retValue);
+    #retValue = clKeient.decryptor.removePadding(retValue);
     #print("RetValue: " +retValue)
             
 def receiveFile(cSock, client):
     if(client.UseCipher):
        testAck = cSock.recv(16,0)
        testAck = client.decryptor.decrypt(testAck)
-       testAck = client.decryptor.removePadding(testAck)
+       #testAck = client.decryptor.removePadding(testAck)
        
     else:
         testAck = cSock.recv(3,0)
@@ -149,7 +176,7 @@ def receiveFile(cSock, client):
                 keepGoing = False
         if(client.cipher.upper() <> "none".upper()):
             dataOut = client.decryptor.decrypt(dataOut)
-            dataOut = client.decryptor.removePadding(dataOut)    
+            #dataOut = client.decryptor.removePadding(dataOut)    
         sys.stdout.write(dataOut)
         sys.stdout.flush()
         
@@ -163,7 +190,7 @@ def sendFile(cSock,client,filename):
     data = cSock.recv(BUFFER_SIZE,0)
     if(client.UseCipher):
             data = client.decryptor.decrypt(data)
-            data = client.decryptor.removePadding(data)
+            #data = client.decryptor.removePadding(data)
     if(data.upper() == 'ack'.upper()):
         path = os.getcwd() + "/" + filename
         #print (path)
@@ -176,7 +203,7 @@ def sendFile(cSock,client,filename):
         
     #sys.stdin.flush()
     if(client.cipher.upper() <> "none".upper()):
-        tempFile = client.encryptor.addPadding(tempFile)
+        #tempFile = client.encryptor.addPadding(tempFile)
         tempFile = client.encryptor.encrypt(tempFile)
     cSock.send(tempFile)
     

@@ -6,6 +6,7 @@
 
 
 import socket
+import signal
 import sys  
 import time
 import random
@@ -72,21 +73,24 @@ class a3Server(object):
             self.checkCipherAndIV(cli)
             #self.validateKey(cli)
             self.setCrypto()
+            keyValid = True
             if(self.UseCipher):
                 print("line 73")                
-                self.validateKey(cli)
+                keyValid = self.validateKey(cli)
                 print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher + ' IV: ' + b64encode(self.IV))
             else:
                 print (time.strftime('%H:%M:%S:') + ' New Client: '+ str(addr[0]) + ' crypto: ' + self.cipher)
             ack = 'ack'
             if(self.cipher.upper() <> "none".upper()):
-                ack = self.encryptor.addPadding(ack)
+                #ack = self.encryptor.addPadding(ack)
                 ack = self.encryptor.encrypt(ack)
             
-            cli.send(ack)
-            self.getCommand(cli)
-            self.executeCommand(cli)  
-                            
+            if(keyValid):
+                print("Line 85")
+                cli.send(ack)
+                self.getCommand(cli)
+                self.executeCommand(cli)  
+                print("Line ")                
     #need to fix this such that it decrypts an incoming message properly
     #initially will be clear communication        
     def checkCipherAndIV(self, cli):
@@ -105,7 +109,7 @@ class a3Server(object):
         data = cli.recv(BUFFER_SIZE,0)
         if(self.cipher.upper() <> "none".upper()):
             data = self.decryptor.decrypt(data)
-            data = self.decryptor.removePadding(data)
+            #data = self.decryptor.removePadding(data)
         
         print(data)
         data = data.decode('ascii')
@@ -117,7 +121,7 @@ class a3Server(object):
         self.setFileName(str(data[1]))
         ack=('ack')
         if(self.cipher.upper() <> 'none'.upper()):
-            ack = self.encryptor.addPadding(ack)
+            #ack = self.encryptor.addPadding(ack)
             ack = self.encryptor.encrypt(ack)
         cli.send(ack)
         print(time.strftime('%H:%M:%S:') + ' command: ' + self.parseCommand() + ' ' + self.FILENAME)
@@ -131,7 +135,7 @@ class a3Server(object):
                 while(f.tell() < fileSize):
                     data += f.read()
                 if(self.cipher.upper() <> "none".upper()):
-                    data = self.encryptor.addPadding(data)                   
+                    #data = self.encryptor.addPadding(data)                   
                     data = self.encryptor.encrypt(data)                    
                 cli.send(data)
                 cli.close()         
@@ -148,7 +152,7 @@ class a3Server(object):
                     keepGoing = False
             if(self.cipher.upper() <> "none".upper()):
                 dataOut = self.decryptor.decrypt(dataOut)
-                dataOut = self.decryptor.removePadding(dataOut)    
+                #dataOut = self.decryptor.removePadding(dataOut)    
             
             fileOut = open(self.FILENAME,'w+')
             fileOut.write(dataOut)
@@ -163,18 +167,46 @@ class a3Server(object):
         data = cli.recv(BUFFER_SIZE,0)
         data = self.decryptor.decrypt(data)
         print(data)
-        data = self.decryptor.removePadding(data)
+        #data = self.decryptor.removePadding(data)
         msgLength = len(data) - 32
         msg = data[:msgLength]
+        #print("msg " + msg)
         hashOfMsg = data[msgLength:]
         hashCheck = hashlib.md5()
+        #print("hashCheck1: "  + str(hashCheck))
         hashCheck.update(msg)
+        #print("hashCheck2: "  + hashCheck.hexdigest())
         hashCheck = hashCheck.hexdigest()
-        ack  = 'ack'
-        ack = self.encryptor.addPadding(ack)
-        ack = self.encryptor.encrypt(ack)
-
-
+        validKey = hmac.compare_digest(hashCheck,hashOfMsg)
+        #print("line 173: " + str(hmac.compare_digest(hashCheck,hashOfMsg)))
+        #print("Message: " + msg)
+        #print("hashOfMsg: " + hashOfMsg)
+        #print("hashCheck3: "  + hashCheck)
+        #ack  = 'ack'
+        #ack = self.encryptor.addPadding(ack)
+        #ack = self.encryptor.encrypt(ack)
+        
+         #raise ValueError("The Key is Invalid")
+        #cli.close()
+        hashTest = hashlib.md5()
+        message = string.lowercase+string.digits+string.uppercase
+        message = ''.join(random.sample(message,31))
+        #print(message)
+        hashTest.update(message)
+        #message = 'message'
+        #print(message.encode("hex"))
+        message += hashTest.hexdigest();
+        #data = client.encryptor.addPadding(message)
+        print("server side message: " + message)
+        out = self.encryptor.encrypt(message)       
+        cli.send(out)
+        #cli.close()
+        
+        if (validKey):
+            return True
+        else:
+            print ("Server side message:  invalid key")
+            return False
 def main():
     serv = a3Server('none','none', 'testKey')
     serv.listenForClients()
