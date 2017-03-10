@@ -19,25 +19,17 @@ class cryptoUtil(object):
         self.cipher = cipher
         if(cipher.upper() == 'aes256'.upper()):
             self.key = self.keyGen(32,key)
-            #print("Line 25: " + self.key)
+            
         else:
             self.key = self.keyGen(16, key)
-            #print("Line 22: " + self.key)
+            
         
-    def decrypt(self, block):
-        #print("cryptoUtil decrypt blocksize :")
-        #print(len(block))
-        #print("block: " + block)
+    def decrypt(self, block):        
         decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)  
-        block = decryptor.decrypt(block)
-        #print("block: " + block)
-        return self.simpleUnPad(block)
-        #return decryptor.decrypt(block)
+        block = decryptor.decrypt(block)       
+        return self.simpleUnPad(block)        
         
-    def encrypt(self,block):
-        #print("cryptoUtil encrypt blocksize :")
-        #print(len(block))
-        #print("line40: " + block)
+    def encrypt(self,block):        
         block = self.simplePad(block)
         encryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
         return encryptor.encrypt(block)
@@ -55,23 +47,13 @@ class cryptoUtil(object):
         if(length % 16 == 0):
             modVal = (16 - length % 16)-1
         else:
-            modVal = (16 - length % 16) 
-        #print(modVal)
-        #while((len(block) % 16) <> 0):
-         #   block += random.choice(string.letters + string.digits)
-        block += ''.join(random.choice(string.letters + string.digits) for i in range(modVal))
-        #print("Crypto Util - line 48")
-        #print(block)
-        #addedBytes = hex(modVal)
+            modVal = (16 - length % 16)       
+        block += ''.join(random.choice(string.letters + string.digits) for i in range(modVal))        
         if(length % 16 <> 0):
             block = block[:len(block)-1]
             block += format(modVal,'02x')[1:]
         else:
-            block += '0'
-        #print(format(modVal,'02x')[1:])
-        
-        #print("Crypto Util - line 64")
-        #print(block)
+            block += '0'        
         return block
         
     def removePadding(self, block):
@@ -81,11 +63,9 @@ class cryptoUtil(object):
         return block[:-padVal]
 
     def simplePad(self, block):
-        BS = 16
-        #print("Line 84 "  + block)
+        BS = 16        
         pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
-        block =  pad(block)
-        #print("line 86 " + block)
+        block =  pad(block)        
         return block
         
     def simpleUnPad(self, block):
