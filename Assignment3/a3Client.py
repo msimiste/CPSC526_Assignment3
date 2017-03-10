@@ -128,8 +128,7 @@ def verifyKey(cSock, client):
         #print("client side hashCheck2: "  + hashCheck.hexdigest())
         hashCheck = hashCheck.hexdigest()
         validKey = hmac.compare_digest(hashCheck,hashOfMsg)
-        #print("Client side, key is valid: " + str(validKey))
-        
+        #print("Client side, key is valid: " + str(validKey))        
         if(not validKey):
             cSock.close()            
             sys.exit('Error: Invalid Key....Shutting Down Client' )            
@@ -139,11 +138,14 @@ def verifyKey(cSock, client):
             
 def receiveFile(cSock, client):
     if(client.UseCipher):
-       testAck = cSock.recv(16,0)
-       testAck = client.decryptor.decrypt(testAck)       
+        print("line 141")
+        testAck = cSock.recv(1024,0)
+        testAck = client.decryptor.decrypt(testAck)       
     else:
-        testAck = cSock.recv(3,0)   
-    
+        testAck = cSock.recv(1024,0)           
+    print("line 146: " + testAck)
+    ackHandler(testAck)
+    print("line 148")
     keepGoing = True 
     dataOut = ''   
     try:
@@ -157,6 +159,7 @@ def receiveFile(cSock, client):
             dataOut = client.decryptor.decrypt(dataOut)              
         sys.stdout.write(dataOut)
         sys.stdout.flush()
+        print("Line 161")
         
                                                           
     except socket.error as t:
@@ -164,21 +167,38 @@ def receiveFile(cSock, client):
             print("Client Closed")
             keepGoing = False
             
-def sendFile(cSock,client,filename): 
+def sendFile(cSock,client,filename):
+    path = os.getcwd() + "/" + filename
+    fileSize = (str(os.path.getsize(path)))
+    if(client.cipher.upper() <> "none".upper()):        
+        fileSize = client.encryptor.encrypt(fileSize)
+    cSock.send(fileSize)
+     
     data = cSock.recv(BUFFER_SIZE,0)
     if(client.UseCipher):
             data = client.decryptor.decrypt(data)            
-    if(data.upper() == 'ack'.upper()):
-        path = os.getcwd() + "/" + filename        
-        print(os.path.getsize(path))        
-        s = os.statvfs('/')
-        temp = (s.f_bavail * s.f_frsize)  / 1024
-        print(temp)
-        tempFile = sys.stdin.read()        
+    #if(data.upper() == 'ack'.upper()):
+    ackHandler(data) 
+    path = os.getcwd() + "/" + filename        
+    print(os.path.getsize(path)) 
+    #send encrypted filesize here
+    #do send filesize       
+    s = os.statvfs('/')
+    temp = (s.f_bavail * s.f_frsize)  / 1024
+    print(temp)
+    tempFile = sys.stdin.read()        
    
     if(client.cipher.upper() <> "none".upper()):        
         tempFile = client.encryptor.encrypt(tempFile)
     cSock.send(tempFile)
+    
+def ackHandler(ack):
+    print("line 189")
+    if(ack.upper() == 'ack'.upper()):
+        print("line 191")
+        #return
+    else:
+        sys.exit(ack)
     
 def testInputs(command, filename, hostname, port, cipher, key):
     print(command)

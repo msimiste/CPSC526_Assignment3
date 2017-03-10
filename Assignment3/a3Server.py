@@ -107,26 +107,65 @@ class a3Server(object):
             self.READ = True  
                 
         self.setFileName(str(data[1]))
-        ack=('ack')
-        if(self.cipher.upper() <> 'none'.upper()):           
-            ack = self.encryptor.encrypt(ack)
-        cli.send(ack)        
+        #ack=('ack')
+        #if(self.cipher.upper() <> 'none'.upper()):           
+           #ack = self.encryptor.encrypt(ack)
+        #cli.send(ack)        
         logMsg = ' command: ' + self.parseCommand() + ' ' + self.FILENAME
         self.loggingMessage(logMsg)
         
     def executeCommand(self, cli):         
         data = ''
+                
         if(self.READ):
-            fileSize = os.stat(self.FILENAME).st_size
-            with open(self.FILENAME, 'rb') as f:
-                while(f.tell() < fileSize):
-                    data += f.read()
-                if(self.cipher.upper() <> "none".upper()):                                       
-                    data = self.encryptor.encrypt(data)                    
-                cli.send(data)
-                cli.close()         
+            path = os.getcwd() + "/" + self.FILENAME
+            tempTest = os.path.isfile(path)
+            self.loggingMessage(' File exists: '+ str(tempTest))
+            ack = ''
+            if(tempTest):
+                ack=('ack')            
+            else:
+                ack = ("Error: That filename does not exist")
+                self.loggingMessage(" Error: File does not exist")
+            
+            if(self.cipher.upper() <> 'none'.upper()):
+                ack = self.encryptor.encrypt(ack)
+        
+            cli.send(ack)
+            if(tempTest):
+                fileSize = os.stat(self.FILENAME).st_size
+                with open(self.FILENAME, 'rb') as f:
+                    while(f.tell() < fileSize):
+                        data += f.read()
+                        if(self.cipher.upper() <> "none".upper()):                                       
+                            data = self.encryptor.encrypt(data)
+                        cli.send(data)                        
+                    #cli.send(data)
+                    cli.close()         
               
         elif(not self.READ):
+            #path = os.getcwd() + "/" + filename        
+            #print(os.path.getsize(path)) 
+            #send encrypted filesize here
+            #do send filesize 
+            fileSize = cli.recv(BUFFER_SIZE,0)
+            if(self.cipher.upper() <> "none".upper()):
+                fileSize = self.decryptor.decrypt(fileSize)
+            print("line 152:" + str(fileSize))      
+            s = os.statvfs('/')
+            #sizeAvail = (s.f_bavail * s.f_frsize)  / 1024
+            sizeAvail = 50
+            if(int(fileSize) < sizeAvail):
+                ack = "ack"
+            else:
+                ack = ("Error: Filesize exceeds available space")
+                self.loggingMessage("Error: Filesize exceeds available space")
+            if(self.cipher.upper() <> "none".upper()):
+                ack = self.encryptor.encrypt(ack)
+            cli.send(ack)
+            #print(temp)
+            #tempFile = sys.stdin.read() 
+            
             keepGoing = True
             dataOut = ''
             while keepGoing:               
