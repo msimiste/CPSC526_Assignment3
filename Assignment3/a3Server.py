@@ -27,6 +27,7 @@ class a3Server(object):
         self.READ = False
         self.FILENAME = ''
         
+        
     
     def setCrypto(self):
         self.decryptor = cryptoUtil(self.key, self.IV, self.cipher)
@@ -45,12 +46,12 @@ class a3Server(object):
         self.UseCipher = (self.cipher.upper() <> "none".upper())
         
     def listenForClients(self):        
-        ip = 'localhost' 
+        ip = '172.19.1.157' 
         cSock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)             # Create a socket object
         cSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # to make sure the connection doesn't hang   
         if(len(sys.argv) == 2):          
-            Port = int(sys.argv[1]) 
-            Key = ''.join(random.SystemRandom().choice(string.letters + string.digits) for i in range(16))           
+            Port = int(sys.argv[1])             
+            Key = ''.join(random.SystemRandom().choice(string.letters + string.digits) for i in range(32))           
         else:
             Port = int(sys.argv[1])         
             Key = sys.argv[2]        
@@ -104,13 +105,11 @@ class a3Server(object):
         data = data.decode('ascii')
         data = data.split()        
         if(data[0].upper() == 'read'.upper()):
-            self.READ = True  
+            self.READ = True 
+        else:
+            self.READ = False
                 
-        self.setFileName(str(data[1]))
-        #ack=('ack')
-        #if(self.cipher.upper() <> 'none'.upper()):           
-           #ack = self.encryptor.encrypt(ack)
-        #cli.send(ack)        
+        self.setFileName(str(data[1]))                
         logMsg = ' command: ' + self.parseCommand() + ' ' + self.FILENAME
         self.loggingMessage(logMsg)
         
@@ -132,40 +131,42 @@ class a3Server(object):
                 ack = self.encryptor.encrypt(ack)
         
             cli.send(ack)
-            if(tempTest):
+            ready = bool(cli.recv(BUFFER_SIZE,0))
+             
+            if(tempTest and ready):
                 fileSize = os.stat(self.FILENAME).st_size
                 with open(self.FILENAME, 'rb') as f:
                     while(f.tell() < fileSize):
                         data += f.read()
                         if(self.cipher.upper() <> "none".upper()):                                       
                             data = self.encryptor.encrypt(data)
-                        cli.send(data)                        
-                    #cli.send(data)
-                    cli.close()         
-              
+                        cli.send(data)                 
+                    f.close()
+                    cli.close()
+                    
         elif(not self.READ):
-            #path = os.getcwd() + "/" + filename        
-            #print(os.path.getsize(path)) 
-            #send encrypted filesize here
-            #do send filesize 
+            
             fileSize = cli.recv(BUFFER_SIZE,0)
             if(self.cipher.upper() <> "none".upper()):
                 fileSize = self.decryptor.decrypt(fileSize)
-            print("line 152:" + str(fileSize))      
+            #print("line 152:" + str(fileSize))      
             s = os.statvfs('/')
-            #sizeAvail = (s.f_bavail * s.f_frsize)  / 1024
-            sizeAvail = 50
-            if(int(fileSize) < sizeAvail):
+            sizeAvail = (s.f_bavail * s.f_frsize)  / 1024 
+            #print(sizeAvail)
+            #sizeAvail = 50           
+            hasSpace = (int(fileSize) < sizeAvail)
+            if(hasSpace):
                 ack = "ack"
             else:
                 ack = ("Error: Filesize exceeds available space")
                 self.loggingMessage("Error: Filesize exceeds available space")
+                
             if(self.cipher.upper() <> "none".upper()):
                 ack = self.encryptor.encrypt(ack)
             cli.send(ack)
-            #print(temp)
-            #tempFile = sys.stdin.read() 
-            
+            if(not hasSpace):
+                return
+                           
             keepGoing = True
             dataOut = ''
             while keepGoing:               
@@ -175,7 +176,7 @@ class a3Server(object):
                     keepGoing = False
             if(self.cipher.upper() <> "none".upper()):
                 dataOut = self.decryptor.decrypt(dataOut)                   
-            fileOut = open(self.FILENAME,'w+')
+            fileOut = open(self.FILENAME,'w')
             fileOut.write(dataOut)
             fileOut.flush()
             fileOut.close()            
@@ -186,22 +187,18 @@ class a3Server(object):
         data = cli.recv(BUFFER_SIZE,0)
         data = self.decryptor.decrypt(data)            
         msgLength = len(data) - 32
-        msg = data[:msgLength]
-        #print("msg " + msg)
+        msg = data[:msgLength]        
         hashOfMsg = data[msgLength:]
-        hashCheck = hashlib.md5()
-        #print("hashCheck1: "  + str(hashCheck))
-        hashCheck.update(msg)
-        #print("hashCheck2: "  + hashCheck.hexdigest())
+        hashCheck = hashlib.md5()        
+        hashCheck.update(msg)        
         hashCheck = hashCheck.hexdigest()
-        validKey = hmac.compare_digest(hashCheck,hashOfMsg)
-        #print("Server Side: " + str(validKey))       
+        validKey = hmac.compare_digest(hashCheck,hashOfMsg)              
         hashTest = hashlib.md5()
         message = string.lowercase+string.digits+string.uppercase
         message = ''.join(random.sample(message,31))       
         hashTest.update(message)        
         message += hashTest.hexdigest()        
-        #print("server side message: " + message)
+        
         out = self.encryptor.encrypt(message)       
         cli.send(out)        
         if (validKey):

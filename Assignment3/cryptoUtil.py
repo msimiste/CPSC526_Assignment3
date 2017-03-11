@@ -27,10 +27,12 @@ class cryptoUtil(object):
     def decrypt(self, block):        
         decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)  
         block = decryptor.decrypt(block)       
-        return self.simpleUnPad(block)        
+        #return self.simpleUnPad(block)        
+        return self.removePadding(block)
         
     def encrypt(self,block):        
-        block = self.simplePad(block)
+        #block = self.simplePad(block)
+        block = self.addPadding(block)
         encryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
         return encryptor.encrypt(block)
         
@@ -61,13 +63,15 @@ class cryptoUtil(object):
         if(padVal == 0):
             padVal = 16
         return block[:-padVal]
-
+    
+    #simplePad and simpleUnPad functions caused issues with decryption 
     def simplePad(self, block):
         BS = 16        
         pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
         block =  pad(block)        
         return block
-        
+    
+
     def simpleUnPad(self, block):
         unpad = lambda s : s[0:-ord(s[-1])]
         return unpad(block)

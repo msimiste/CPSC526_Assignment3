@@ -1,0 +1,1025 @@
+
+Tests 1 - 10
+File = 1KB.bin
+Encryption = none
+Command: read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 1KB.bin 172.19.1.157:9998 none > 1KB_bin_output$i.bin; done
+
+
+real	0m0.061s
+user	0m0.037s
+sys	0m0.014s
+
+real	0m0.027s
+user	0m0.016s
+sys	0m0.007s
+
+real	0m0.026s
+user	0m0.014s
+sys	0m0.008s
+
+real	0m0.025s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.026s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.026s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.026s
+user	0m0.014s
+sys	0m0.009s
+
+real	0m0.025s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.026s
+user	0m0.013s
+sys	0m0.009s
+
+real	0m0.026s
+user	0m0.020s
+sys	0m0.003s
+
+sha256sum 1KB*.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output0.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output1.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output2.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output3.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output4.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output5.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output6.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output7.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output8.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output9.bin
+
+Tests 11- 20
+File: 1MB.bin
+Encryption = none
+Command = read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 1MB.bin 172.19.1.157:9998 none > 1MB_bin_output$i.bin; done
+
+real	0m0.115s
+user	0m0.021s
+sys	0m0.015s
+
+real	0m0.051s
+user	0m0.018s
+sys	0m0.006s
+
+real	0m0.050s
+user	0m0.017s
+sys	0m0.007s
+
+real	0m0.049s
+user	0m0.015s
+sys	0m0.008s
+
+real	0m0.048s
+user	0m0.014s
+sys	0m0.009s
+
+real	0m0.049s
+user	0m0.015s
+sys	0m0.009s
+
+real	0m0.048s
+user	0m0.014s
+sys	0m0.010s
+
+real	0m0.050s
+user	0m0.018s
+sys	0m0.005s
+
+real	0m0.048s
+user	0m0.011s
+sys	0m0.012s
+
+real	0m0.051s
+user	0m0.014s
+sys	0m0.009s
+
+sha256sum 1MB*.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output0.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output1.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output2.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output3.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output4.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output5.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output6.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output7.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output8.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output9.bin
+
+
+Tests 21- 30
+File: 256MB.bin
+Encryption = none
+Command = read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.1.157:9998 none > 256MB_bin_output$i.bin; done
+
+real	0m7.389s
+user	0m0.074s
+sys	0m0.460s
+
+real	0m5.335s
+user	0m0.078s
+sys	0m0.410s
+
+real	0m5.220s
+user	0m0.066s
+sys	0m0.350s
+
+real	0m5.247s
+user	0m0.076s
+sys	0m0.332s
+
+real	0m5.474s
+user	0m0.071s
+sys	0m0.325s
+
+real	0m5.284s
+user	0m0.096s
+sys	0m0.511s
+
+real	0m4.853s
+user	0m0.077s
+sys	0m0.339s
+
+real	0m4.958s
+user	0m0.120s
+sys	0m0.563s
+
+real	0m4.855s
+user	0m0.063s
+sys	0m0.244s
+
+real	0m4.906s
+user	0m0.059s
+sys	0m0.361s
+
+sha256sum 256MB*.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
+02e9f9ba0230e9f1a80e40b582b4ee0c601e231ca84e47f938b77155ac58e2e3  256MB_bin_output5.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output6.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output7.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output8.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output9.bin
+
+
+Tests 31- 40
+File: 1KB.bin
+Encryption = aes128
+User Chosen Key: secretKey123459a
+Command = read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 1KB.bin 172.19.1.157:9998 aes128 secretKey123459a > 1KB_bin_output$i.bin; done
+
+real	0m0.125s
+user	0m0.028s
+sys	0m0.008s
+
+real	0m0.107s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.110s
+user	0m0.018s
+sys	0m0.006s
+
+real	0m0.109s
+user	0m0.020s
+sys	0m0.003s
+
+real	0m0.107s
+user	0m0.016s
+sys	0m0.005s
+
+real	0m0.108s
+user	0m0.019s
+sys	0m0.004s
+
+real	0m0.107s
+user	0m0.013s
+sys	0m0.008s
+
+real	0m0.107s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.108s
+user	0m0.018s
+sys	0m0.004s
+
+real	0m0.107s
+user	0m0.016s
+sys	0m0.005s
+
+sha256sum 1KB*.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output0.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output1.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output2.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output3.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output4.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output5.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output6.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output7.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output8.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output9.bin
+
+Tests 41- 50
+File: 1MB.bin
+Encryption = aes128
+User Chosen Key: secretKey123459a
+Command = read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 1MB.bin 172.19.1.157:9998 aes128 secretKey123459a > 1MB_bin_output$i.bin; done
+
+real	0m0.158s
+user	0m0.019s
+sys	0m0.010s
+
+real	0m0.141s
+user	0m0.020s
+sys	0m0.007s
+
+real	0m0.140s
+user	0m0.024s
+sys	0m0.003s
+
+real	0m0.144s
+user	0m0.016s
+sys	0m0.012s
+
+real	0m0.140s
+user	0m0.020s
+sys	0m0.007s
+
+real	0m0.141s
+user	0m0.017s
+sys	0m0.010s
+
+real	0m0.137s
+user	0m0.019s
+sys	0m0.008s
+
+real	0m0.141s
+user	0m0.020s
+sys	0m0.007s
+
+real	0m0.141s
+user	0m0.020s
+sys	0m0.007s
+
+real	0m0.140s
+user	0m0.024s
+sys	0m0.003s
+
+sha256sum 1MB*.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output0.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output1.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output2.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output3.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output4.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output5.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output6.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output7.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output8.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output9.bin
+
+
+Tests 51- 60
+File: 256MB.bin
+Encryption = aes128
+User Chosen Key: secretKey123459a
+Command = read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.1.157:9998 aes128 secretKey123459a > 256MB_bin_output$i.bin; done
+
+real	0m7.760s
+user	0m1.180s
+sys	0m0.528s
+
+real	0m7.930s
+user	0m1.210s
+sys	0m0.563s
+
+real	0m7.727s
+user	0m1.191s
+sys	0m0.458s
+
+real	0m7.915s
+user	0m1.203s
+sys	0m0.510s
+
+real	0m7.854s
+user	0m1.241s
+sys	0m0.513s
+
+real	0m7.828s
+user	0m1.243s
+sys	0m0.504s
+
+real	0m7.478s
+user	0m1.256s
+sys	0m0.481s
+
+real	0m7.555s
+user	0m1.214s
+sys	0m0.514s
+
+real	0m7.532s
+user	0m1.274s
+sys	0m0.571s
+
+real	0m7.488s
+user	0m1.206s
+sys	0m0.445s
+
+Assignment3]$ sha256sum 256MB*.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
+f3c863b93058d0158d9d0b4dc702b01541c2c2a116632442ad04afbde7fc7105  256MB_bin_output5.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output6.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output7.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output8.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output9.bin
+
+
+Tests 61- 70
+File: 1KB.bin
+Encryption = aes256
+User Chosen Key: secretKey123459a
+Command = read
+
+for((i=0; i<10; i++)); do time python a3Client.py read 1KB.bin 172.19.1.157:9998 aes256 secretKey123459a > 1KB_bin_output$i.bin; done
+
+real	0m0.139s
+user	0m0.039s
+sys	0m0.007s
+
+real	0m0.108s
+user	0m0.016s
+sys	0m0.007s
+
+real	0m0.110s
+user	0m0.019s
+sys	0m0.005s
+
+real	0m0.108s
+user	0m0.017s
+sys	0m0.005s
+
+real	0m0.107s
+user	0m0.017s
+sys	0m0.004s
+
+real	0m0.107s
+user	0m0.020s
+sys	0m0.002s
+
+real	0m0.107s
+user	0m0.017s
+sys	0m0.005s
+
+real	0m0.110s
+user	0m0.019s
+sys	0m0.005s
+
+real	0m0.108s
+user	0m0.016s
+sys	0m0.007s
+
+real	0m0.108s
+user	0m0.015s
+sys	0m0.006s
+
+sha256sum 1KB*.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output0.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output1.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output2.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output3.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output4.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output5.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output6.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output7.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output8.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output9.bin
+
+Tests 71- 80
+File: 1MB.bin
+Encryption = aes256
+User Chosen Key: secretKey123459a
+Command = read
+
+ for((i=0; i<10; i++)); do time python a3Client.py read 1MB.bin 172.19.1.157:9998 aes256 secretKey123459a > 1MB_bin_output$i.bin; done
+
+real	0m0.198s
+user	0m0.019s
+sys	0m0.017s
+
+real	0m0.143s
+user	0m0.023s
+sys	0m0.005s
+
+real	0m0.143s
+user	0m0.021s
+sys	0m0.007s
+
+real	0m0.144s
+user	0m0.023s
+sys	0m0.005s
+
+real	0m0.145s
+user	0m0.020s
+sys	0m0.009s
+
+real	0m0.143s
+user	0m0.020s
+sys	0m0.009s
+
+real	0m0.141s
+user	0m0.020s
+sys	0m0.009s
+
+real	0m0.141s
+user	0m0.019s
+sys	0m0.009s
+
+real	0m0.141s
+user	0m0.022s
+sys	0m0.006s
+
+real	0m0.142s
+user	0m0.018s
+sys	0m0.011s
+
+sha256sum 1MB*.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output0.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output1.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output2.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output3.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output4.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output5.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output6.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output7.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output8.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output9.bin
+
+Tests 81- 90
+File: 256MB.bin
+Encryption = aes256
+User Chosen Key: secretKey123459a
+Command = read
+
+ for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.1.157:9998 aes256 secretKey123459a > 256MB_bin_output$i.bin; done
+
+real	0m8.353s
+user	0m1.558s
+sys	0m0.597s
+
+real	0m8.552s
+user	0m1.503s
+sys	0m0.527s
+
+real	0m8.396s
+user	0m1.513s
+sys	0m0.527s
+
+real	0m8.353s
+user	0m1.554s
+sys	0m0.511s
+
+real	0m8.447s
+user	0m1.518s
+sys	0m0.484s
+
+real	0m8.378s
+user	0m1.458s
+sys	0m0.457s
+
+real	0m8.080s
+user	0m1.551s
+sys	0m0.525s
+
+real	0m8.059s
+user	0m1.529s
+sys	0m0.477s
+
+real	0m8.073s
+user	0m1.487s
+sys	0m0.426s
+
+real	0m8.071s
+user	0m1.472s
+sys	0m0.444s
+
+sha256sum 256MB*.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
+cf1168564585ec18f903b27ccc14858d82955cee69ab11c4039bb3d7b335b71c  256MB_bin_output5.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output6.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output7.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output8.bin
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output9.bin
+
+
+-rw-------. 1 msimiste jr 268435456 Mar 10 21:30 256MB.bin
+-rw-------. 1 msimiste jr 268435456 Mar 10 21:49 256MB_bin_output0.bin
+-rw-------. 1 msimiste jr 268435456 Mar 10 21:49 256MB_bin_output1.bin
+-rw-------. 1 msimiste jr 268435456 Mar 10 21:49 256MB_bin_output2.bin
+-rw-------. 1 msimiste jr 268435456 Mar 10 21:50 256MB_bin_output3.bin
+-rw-------. 1 msimiste jr 268435456 Mar 10 21:50 256MB_bin_output4.bin
+-rw-------. 1 msimiste jr 207556608 Mar 10 21:50 256MB_bin_output5.bin
+-rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output6.bin
+-rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output7.bin
+-rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output8.bin
+-rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output9.bin
+
+
+
+Tests 91- 100
+File: 1KB.bin
+Encryption = none
+Command = write
+
+for((i=0; i<10; i++)); do time python a3Client.py write 1KB_bin_output$i.bin 172.19.1.157:9998 none < 1KB.bin; done
+
+real	0m0.064s
+user	0m0.014s
+sys	0m0.008s
+
+real	0m0.065s
+user	0m0.021s
+sys	0m0.001s
+
+real	0m0.063s
+user	0m0.014s
+sys	0m0.006s
+
+real	0m0.062s
+user	0m0.014s
+sys	0m0.006s
+
+real	0m0.062s
+user	0m0.014s
+sys	0m0.006s
+
+real	0m0.064s
+user	0m0.017s
+sys	0m0.004s
+
+real	0m0.063s
+user	0m0.015s
+sys	0m0.006s
+
+real	0m0.063s
+user	0m0.014s
+sys	0m0.006s
+
+real	0m0.062s
+user	0m0.015s
+sys	0m0.006s
+
+real	0m0.063s
+user	0m0.018s
+sys	0m0.002s
+
+
+sha256sum 1KB*.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output0.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output1.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output2.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output3.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output4.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output5.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output6.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output7.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output8.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output9.bin
+
+Tests 101- 110
+File: 1MB.bin
+Encryption = none
+Command = write
+
+for((i=0; i<10; i++)); do time python a3Client.py write 1MB_bin_output$i.bin 172.19.1.157:9998 none < 1MB.bin; done
+
+real	0m0.111s
+user	0m0.018s
+sys	0m0.007s
+
+real	0m0.070s
+user	0m0.015s
+sys	0m0.005s
+
+real	0m0.070s
+user	0m0.013s
+sys	0m0.008s
+
+real	0m0.071s
+user	0m0.013s
+sys	0m0.008s
+
+real	0m0.073s
+user	0m0.018s
+sys	0m0.004s
+
+real	0m0.072s
+user	0m0.017s
+sys	0m0.005s
+
+real	0m0.069s
+user	0m0.011s
+sys	0m0.010s
+
+real	0m0.070s
+user	0m0.014s
+sys	0m0.007s
+
+real	0m0.070s
+user	0m0.015s
+sys	0m0.006s
+
+real	0m0.069s
+user	0m0.016s
+sys	0m0.004s
+
+sha256sum 1MB*.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output0.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output1.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output2.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output3.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output4.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output5.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output6.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output7.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output8.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output9.bin
+
+
+Tests 101- 110
+File: 256MB.bin
+Encryption = none
+Command = write
+
+
+Tests 121- 130
+File: 1KB.bin
+Encryption = aes128
+User Chosen Key: secretKey123459a
+Command = write
+
+
+for((i=0; i<10; i++)); do time python a3Client.py write 1KB_bin_output$i.bin 172.19.1.157:9998 aes128 secretKey123459a < 1KB.bin; done
+
+real	0m0.147s
+user	0m0.015s
+sys	0m0.006s
+
+real	0m0.146s
+user	0m0.015s
+sys	0m0.006s
+
+real	0m0.148s
+user	0m0.018s
+sys	0m0.005s
+
+real	0m0.149s
+user	0m0.019s
+sys	0m0.005s
+
+real	0m0.145s
+user	0m0.015s
+sys	0m0.006s
+
+real	0m0.146s
+user	0m0.016s
+sys	0m0.005s
+
+real	0m0.146s
+user	0m0.016s
+sys	0m0.005s
+
+real	0m0.146s
+user	0m0.017s
+sys	0m0.004s
+
+real	0m0.145s
+user	0m0.013s
+sys	0m0.007s
+
+real	0m0.146s
+user	0m0.017s
+sys	0m0.004s
+
+sha256sum 1KB*.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output0.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output1.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output2.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output3.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output4.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output5.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output6.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output7.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output8.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output9.bin
+
+
+Tests 131- 140
+File: 1MB.bin
+Encryption = aes128
+User Chosen Key: secretKey123459a
+Command = write
+
+
+for((i=0; i<10; i++)); do time python a3Client.py write 1MB_bin_output$i.bin 172.19.1.157:9998 aes128 secretKey123459a < 1MB.bin; done
+
+real	0m0.197s
+user	0m0.018s
+sys	0m0.014s
+
+real	0m0.172s
+user	0m0.020s
+sys	0m0.006s
+
+real	0m0.162s
+user	0m0.018s
+sys	0m0.009s
+
+real	0m0.162s
+user	0m0.021s
+sys	0m0.005s
+
+real	0m0.161s
+user	0m0.015s
+sys	0m0.011s
+
+real	0m0.160s
+user	0m0.024s
+sys	0m0.002s
+
+real	0m0.160s
+user	0m0.019s
+sys	0m0.008s
+
+real	0m0.162s
+user	0m0.023s
+sys	0m0.004s
+
+real	0m0.158s
+user	0m0.020s
+sys	0m0.006s
+
+real	0m0.157s
+user	0m0.016s
+sys	0m0.010s
+
+sha256sum 1MB*.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output0.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output1.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output2.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output3.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output4.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output5.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output6.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output7.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output8.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output9.bin
+
+Tests 141- 150
+File: 256MB.bin
+Encryption = aes128
+User Chosen Key: secretKey123459a
+Command = write
+
+for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.1.157:9998 aes128 secretKey123459a < 256MB.bin; done
+
+real	0m3.840s
+user	0m1.158s
+sys	0m0.305s
+
+real	0m7.814s
+user	0m1.140s
+sys	0m0.401s
+
+real	0m7.933s
+user	0m1.152s
+sys	0m0.404s
+
+real	0m7.984s
+user	0m1.149s
+sys	0m0.396s
+
+real	0m7.849s
+user	0m1.126s
+sys	0m0.339s
+
+real	0m7.803s
+user	0m1.143s
+sys	0m0.365s
+
+sha256sum 256MB*.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
+aa229a6431c3b34693b228e34127e41812cd29224d74c0ef3210cae6c5676f90  256MB_bin_output5.bin
+
+
+Tests 151- 160
+File: 1KB.bin
+Encryption = aes256
+User Chosen Key: secretKey123459a
+Command = write
+
+for((i=0; i<10; i++)); do time python a3Client.py write 1KB_bin_output$i.bin 172.19.1.157:9998 aes256 secretKey123459a < 1KB.bin; done
+
+real	0m0.215s
+user	0m0.033s
+sys	0m0.021s
+
+real	0m0.146s
+user	0m0.017s
+sys	0m0.004s
+
+real	0m0.146s
+user	0m0.016s
+sys	0m0.006s
+
+real	0m0.147s
+user	0m0.020s
+sys	0m0.003s
+
+real	0m0.145s
+user	0m0.018s
+sys	0m0.003s
+
+real	0m0.148s
+user	0m0.017s
+sys	0m0.006s
+
+real	0m0.145s
+user	0m0.014s
+sys	0m0.007s
+
+real	0m0.149s
+user	0m0.020s
+sys	0m0.004s
+
+real	0m0.146s
+user	0m0.017s
+sys	0m0.004s
+
+real	0m0.145s
+user	0m0.013s
+sys	0m0.007s
+
+sha256sum *_bin_*.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output0.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output1.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output2.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output3.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output4.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output5.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output6.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output7.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output8.bin
+b2a80f2d6be606a03ecb951d66a2466538f18a3fcdd9ab49ba460bc8553eb678  1KB_bin_output9.bin
+
+
+Tests 161- 170
+File: 1MB.bin
+Encryption = aes256
+User Chosen Key: secretKey123459a
+Command = write
+
+for((i=0; i<10; i++)); do time python a3Client.py write 1MB_bin_output$i.bin 172.19.1.157:9998 aes256 secretKey123459a < 1MB.bin; done
+
+real	0m0.200s
+user	0m0.027s
+sys	0m0.009s
+
+real	0m0.166s
+user	0m0.022s
+sys	0m0.005s
+
+real	0m0.167s
+user	0m0.026s
+sys	0m0.005s
+
+real	0m0.163s
+user	0m0.019s
+sys	0m0.008s
+
+real	0m0.163s
+user	0m0.023s
+sys	0m0.004s
+
+real	0m0.171s
+user	0m0.023s
+sys	0m0.004s
+
+real	0m0.166s
+user	0m0.028s
+sys	0m0.003s
+
+real	0m0.169s
+user	0m0.023s
+sys	0m0.008s
+
+real	0m0.165s
+user	0m0.024s
+sys	0m0.005s
+
+real	0m0.159s
+user	0m0.024s
+sys	0m0.003s
+
+sha256sum 1MB*.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output0.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output1.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output2.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output3.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output4.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output5.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output6.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output7.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output8.bin
+1bb48d0c89d72edf5d0720bbd9de1aeb646b3d5a5e80a1bc7c52d4047aecd26f  1MB_bin_output9.bin
+
+
+Tests 171- 180
+File: 256MB.bin
+Encryption = aes256
+User Chosen Key: secretKey123459a
+Command = write
+
+for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.1.157:9998 aes256 secretKey123459a < 256MB.bin; done
+
+real	0m4.125s
+user	0m1.417s
+sys	0m0.331s
+
+real	0m8.294s
+user	0m1.455s
+sys	0m0.290s
+
+real	0m8.401s
+user	0m1.428s
+sys	0m0.372s
+
+real	0m8.429s
+user	0m1.442s
+sys	0m0.293s
+
+real	0m8.429s
+user	0m1.451s
+sys	0m0.370s
+
+real	0m8.380s
+user	0m1.443s
+sys	0m0.392s
+
+sha256sum 256MB*.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
+8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
+e2e0332ccc57fcb4012dc5f470ca6a57efb5426d2992ed2d600626ae7bbc08a0  256MB_bin_output5.bin

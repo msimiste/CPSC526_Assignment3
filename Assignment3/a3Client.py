@@ -118,17 +118,13 @@ def verifyKey(cSock, client):
         testData = cSock.recv(1024,0)
         testData = client.decryptor.decrypt(testData)        
         msgLength = len(testData) - 32
-        msg = testData[:msgLength]
-        #print("Client Key : "  + client.key)       
-        #print("client side msg " + msg)
+        msg = testData[:msgLength]        
         hashOfMsg = testData[msgLength:]
-        hashCheck = hashlib.md5()
-        #print("client side hashCheck1: "  + str(hashCheck))
-        hashCheck.update(msg)
-        #print("client side hashCheck2: "  + hashCheck.hexdigest())
+        hashCheck = hashlib.md5()        
+        hashCheck.update(msg)        
         hashCheck = hashCheck.hexdigest()
         validKey = hmac.compare_digest(hashCheck,hashOfMsg)
-        #print("Client side, key is valid: " + str(validKey))        
+           
         if(not validKey):
             cSock.close()            
             sys.exit('Error: Invalid Key....Shutting Down Client' )            
@@ -137,15 +133,14 @@ def verifyKey(cSock, client):
             print("caught error")             
             
 def receiveFile(cSock, client):
-    if(client.UseCipher):
-        print("line 141")
+    if(client.UseCipher):        
         testAck = cSock.recv(1024,0)
         testAck = client.decryptor.decrypt(testAck)       
     else:
         testAck = cSock.recv(1024,0)           
-    print("line 146: " + testAck)
-    ackHandler(testAck)
-    print("line 148")
+    
+    ackHandler(cSock,testAck)  
+    cSock.send("True") 
     keepGoing = True 
     dataOut = ''   
     try:
@@ -153,51 +148,47 @@ def receiveFile(cSock, client):
             data = cSock.recv(BUFFER_SIZE,0)                                     
             dataOut += data
             if not data:                
-                cSock.close()
+                #cSock.close()
                 keepGoing = False
         if(client.cipher.upper() <> "none".upper()):
             dataOut = client.decryptor.decrypt(dataOut)              
         sys.stdout.write(dataOut)
+        cSock.close()
         sys.stdout.flush()
-        print("Line 161")
-        
-                                                          
+                                                                  
     except socket.error as t:
         if t.errno == errno.EPIPE:
             print("Client Closed")
             keepGoing = False
             
 def sendFile(cSock,client,filename):
-    path = os.getcwd() + "/" + filename
-    fileSize = (str(os.path.getsize(path)))
+    #path = os.getcwd() + "/" + filename
+    #fileSize = (str(os.path.getsize(path)))
+    tempFile = sys.stdin.read() 
+    fileSize = str(len(tempFile))
     if(client.cipher.upper() <> "none".upper()):        
         fileSize = client.encryptor.encrypt(fileSize)
     cSock.send(fileSize)
      
     data = cSock.recv(BUFFER_SIZE,0)
     if(client.UseCipher):
-            data = client.decryptor.decrypt(data)            
-    #if(data.upper() == 'ack'.upper()):
-    ackHandler(data) 
-    path = os.getcwd() + "/" + filename        
-    print(os.path.getsize(path)) 
-    #send encrypted filesize here
-    #do send filesize       
-    s = os.statvfs('/')
-    temp = (s.f_bavail * s.f_frsize)  / 1024
-    print(temp)
-    tempFile = sys.stdin.read()        
+        data = client.decryptor.decrypt(data)   
+    ackHandler(cSock, data) 
+    #path = os.getcwd() + "/" + filename      
+    #s = os.statvfs('/')
+    #temp = (s.f_bavail * s.f_frsize)  / 1024
+    #print(temp)
+           
    
     if(client.cipher.upper() <> "none".upper()):        
         tempFile = client.encryptor.encrypt(tempFile)
     cSock.send(tempFile)
     
-def ackHandler(ack):
-    print("line 189")
-    if(ack.upper() == 'ack'.upper()):
-        print("line 191")
-        #return
+def ackHandler(cSock,ack):   
+    if(ack.upper() == 'ack'.upper()):        
+        return
     else:
+        cSock.send('')
         sys.exit(ack)
     
 def testInputs(command, filename, hostname, port, cipher, key):
@@ -207,8 +198,7 @@ def testInputs(command, filename, hostname, port, cipher, key):
     print(port)
     print(cipher)
     print(key)
-
-        
+ 
 
 if __name__ == '__main__':
     main()
