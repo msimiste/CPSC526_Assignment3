@@ -566,73 +566,60 @@ Encryption = aes256
 User Chosen Key: secretKey123459a
 Command = read
 
- for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.1.157:9998 aes256 secretKey123459a > 256MB_bin_output$i.bin; done
+for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.2.81:9998 aes256 notsosecret123 > 256MB_bin_output$i.bin; done
 
-real	0m8.353s
-user	0m1.558s
-sys	0m0.597s
+real	0m5.882s
+user	0m1.522s
+sys	0m0.414s
 
-real	0m8.552s
-user	0m1.503s
-sys	0m0.527s
+real	0m5.849s
+user	0m1.511s
+sys	0m0.423s
 
-real	0m8.396s
-user	0m1.513s
-sys	0m0.527s
+real	0m5.961s
+user	0m1.496s
+sys	0m0.432s
 
-real	0m8.353s
-user	0m1.554s
-sys	0m0.511s
+real	0m5.839s
+user	0m1.569s
+sys	0m0.536s
 
-real	0m8.447s
-user	0m1.518s
-sys	0m0.484s
+real	0m5.857s
+user	0m1.509s
+sys	0m0.415s
 
-real	0m8.378s
-user	0m1.458s
-sys	0m0.457s
+real	0m5.863s
+user	0m1.502s
+sys	0m0.420s
 
-real	0m8.080s
-user	0m1.551s
-sys	0m0.525s
+real	0m5.806s
+user	0m1.459s
+sys	0m0.418s
 
-real	0m8.059s
-user	0m1.529s
-sys	0m0.477s
+real	0m5.812s
+user	0m1.477s
+sys	0m0.418s
 
-real	0m8.073s
-user	0m1.487s
-sys	0m0.426s
+real	0m5.799s
+user	0m1.462s
+sys	0m0.425s
 
-real	0m8.071s
-user	0m1.472s
-sys	0m0.444s
+real	0m5.987s
+user	0m1.537s
+sys	0m0.432s
 
-sha256sum 256MB*.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
-cf1168564585ec18f903b27ccc14858d82955cee69ab11c4039bb3d7b335b71c  256MB_bin_output5.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output6.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output7.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output8.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output9.bin
-
-
--rw-------. 1 msimiste jr 268435456 Mar 10 21:30 256MB.bin
--rw-------. 1 msimiste jr 268435456 Mar 10 21:49 256MB_bin_output0.bin
--rw-------. 1 msimiste jr 268435456 Mar 10 21:49 256MB_bin_output1.bin
--rw-------. 1 msimiste jr 268435456 Mar 10 21:49 256MB_bin_output2.bin
--rw-------. 1 msimiste jr 268435456 Mar 10 21:50 256MB_bin_output3.bin
--rw-------. 1 msimiste jr 268435456 Mar 10 21:50 256MB_bin_output4.bin
--rw-------. 1 msimiste jr 207556608 Mar 10 21:50 256MB_bin_output5.bin
--rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output6.bin
--rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output7.bin
--rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output8.bin
--rw-------. 1 msimiste jr         0 Mar 10 21:50 256MB_bin_output9.bin
+sha256sum 256*.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output0.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output1.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output2.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output3.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output4.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output5.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output6.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output7.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output8.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output9.bin
 
 
 
@@ -762,6 +749,61 @@ Tests 101- 110
 File: 256MB.bin
 Encryption = none
 Command = write
+
+ for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.2.81:9998 none < 256MB.bin; done
+real	0m2.444s
+user	0m0.039s
+sys	0m0.145s
+
+real	0m3.321s
+user	0m0.016s
+sys	0m0.169s
+
+real	0m3.297s
+user	0m0.016s
+sys	0m0.136s
+
+real	0m3.270s
+user	0m0.016s
+sys	0m0.135s
+
+real	0m3.382s
+user	0m0.016s
+sys	0m0.193s
+
+real	0m3.175s
+user	0m0.012s
+sys	0m0.137s
+
+real	0m3.269s
+user	0m0.016s
+sys	0m0.141s
+
+real	0m3.289s
+user	0m0.016s
+sys	0m0.197s
+
+real	0m3.495s
+user	0m0.016s
+sys	0m0.137s
+
+real	0m3.247s
+user	0m0.016s
+sys	0m0.135s
+
+sha256sum 256*.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output0.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output1.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output2.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output3.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output4.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output5.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output6.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output7.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output8.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output9.bin
+
 
 
 Tests 121- 130
@@ -895,60 +937,61 @@ Encryption = aes128
 User Chosen Key: secretKey123459a
 Command = write
 
-for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.2.81:9998 aes256 notsosecret123 > 256MB_bin_output$i.bin; done
+for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.2.81:9998 aes128 notsosecret123 < 256MB.bin; done
 
-real	0m7.014s
-user	0m1.481s
-sys	0m0.464s
+real	0m3.772s
+user	0m1.162s
+sys	0m0.269s
 
-real	0m6.993s
-user	0m1.506s
-sys	0m0.514s
+real	0m6.281s
+user	0m1.151s
+sys	0m0.295s
 
-real	0m6.678s
-user	0m1.490s
-sys	0m0.515s
+real	0m6.099s
+user	0m1.144s
+sys	0m0.353s
 
-real	0m7.036s
-user	0m1.513s
-sys	0m0.471s
+real	0m5.978s
+user	0m1.123s
+sys	0m0.365s
 
-real	0m7.028s
-user	0m1.526s
-sys	0m0.563s
+real	0m5.989s
+user	0m1.136s
+sys	0m0.367s
 
-real	0m7.144s
-user	0m1.458s
-sys	0m0.498s
+real	0m5.920s
+user	0m1.123s
+sys	0m0.303s
 
-real	0m7.006s
-user	0m1.436s
-sys	0m0.464s
+real	0m6.056s
+user	0m1.140s
+sys	0m0.366s
 
-real	0m6.894s
-user	0m1.471s
-sys	0m0.466s
+real	0m6.113s
+user	0m1.137s
+sys	0m0.406s
 
-real	0m6.985s
-user	0m1.506s
-sys	0m0.507s
+real	0m6.552s
+user	0m1.155s
+sys	0m0.348s
 
-real	0m6.861s
-user	0m1.489s
-sys	0m0.490s
+real	0m6.314s
+user	0m1.133s
+sys	0m0.306s
 
-[msimiste@zone40-ta Assignment3]$ sha256sum 256MB*.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output0.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output1.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output2.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output3.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output4.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output5.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output6.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output7.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output8.bin
-1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output9.bin
+
+sha256sum 256*.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output0.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output1.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output2.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output3.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output4.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output5.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output6.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output7.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output8.bin
+7f5b8a374b65b1030166bdcfe4a4f4bc1f499363e052c148592177198e6cea66  256MB_bin_output9.bin
 
 
 
