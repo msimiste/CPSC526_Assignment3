@@ -27,12 +27,12 @@ class cryptoUtil(object):
     def decrypt(self, block):        
         decryptor = AES.new(self.key,AES.MODE_CBC,self.IV)  
         block = decryptor.decrypt(block)       
-        #return self.simpleUnPad(block)        
-        return self.removePadding(block)
+        return self.simpleUnPad(block)        
+        #return self.removePadding(block)
         
     def encrypt(self,block):        
-        #block = self.simplePad(block)
-        block = self.addPadding(block)
+        block = self.simplePad(block)
+        #block = self.addPadding(block)
         encryptor = AES.new(self.key,AES.MODE_CBC,self.IV)
         return encryptor.encrypt(block)
         

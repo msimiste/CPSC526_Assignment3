@@ -116,6 +116,7 @@ def verifyKey(cSock, client):
     try:
         cSock.send(data)
         testData = cSock.recv(1024,0)
+        #print("Line 119: " + testData)
         testData = client.decryptor.decrypt(testData)        
         msgLength = len(testData) - 32
         msg = testData[:msgLength]        

@@ -46,7 +46,7 @@ class a3Server(object):
         self.UseCipher = (self.cipher.upper() <> "none".upper())
         
     def listenForClients(self):        
-        ip = '172.19.1.157' 
+        ip = '172.19.2.81' 
         cSock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)             # Create a socket object
         cSock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # to make sure the connection doesn't hang   
         if(len(sys.argv) == 2):          

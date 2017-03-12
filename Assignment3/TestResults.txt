@@ -1,4 +1,73 @@
 
+
+
+
+Protocol descripton:
+
+Server starts and either generates a random key or uses the key provided as an arg on cmdline
+server binds to the port and waits for incoming messages, echoing a message and the key to the screen.
+Client connects
+Client sends cipher in the clear
+Server sends the string ‘ack’ in the clear back to client
+Client determines if the message is a string ‘ack’, and if so does Client sends the IV in the clear.
+If encryption is being used, Client initiates ‘verify key’
+Verify Key:
+	The client creates a random 31  character string, call it message,	
+	The client then:
+		hashes message using an md5 hash function
+		appends the hash to message, (ie message = message || hash_of_message)
+		encrypts the appended message || hash_of_message
+		Sends to server
+
+	The Server then:
+		receives the message
+		decrypts the message
+		determines length of the message – hash (ie length = len(message) – 32)
+		parses the message portion and stores in avariable
+		parses the hash portion and stores in a variable
+		hashes the message portion
+		compares the hash of the message portion to previously stored hash variable
+		hashes message using an md5 hash function
+		appends the hash to message, (ie message = message || hash_of_message)
+		encrypts the appended message || hash_of_message
+		Sends to client
+		Returns True if the hash of message = paresed hash value, false otherwise
+		If false the server does nothing else
+		
+	The Client then:
+		receives the server message, performs the same steps as above to verify the message and	 
+		respective hash
+		if the hash is not correct the client shuts down and displays an error message
+	
+	If key is validServer sends ‘ack’ to client, encrypted if encryption is used
+	Client	receives the ack and sends the command and filename to be used, (encrypted if 		necessary)
+	Server receives command, displays log info
+		If command is a read:
+		Server verifies that file exists and sends ‘ack’ to client, 
+		If file does not exists, server sends error message in the form of a string and displays log 		message.		
+		Client 	upon successful ack, 
+		Sends message to server
+		client waits to accept stream from server		
+		Server waits for acknowledgment from client
+		Server reads file
+		Server encrypts file,
+		Server Sends file
+		Client receieves
+		Client decryps
+		Clients writestto stdout
+
+		if command is a write:
+
+		Client reads in the file,
+		Client gets size of file
+		Client sends size to server
+		Server receives file size
+		Server Determines size of space on disk
+		server sends ack or error
+		Client receives ack
+		Client encr
+
+
 Tests 1 - 10
 File = 1KB.bin
 Encryption = none
@@ -126,60 +195,62 @@ File: 256MB.bin
 Encryption = none
 Command = read
 
-for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.1.157:9998 none > 256MB_bin_output$i.bin; done
+ffor((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.2.81:9998 none > 256MB_bin_output$i.bin; done
 
-real	0m7.389s
-user	0m0.074s
-sys	0m0.460s
-
-real	0m5.335s
-user	0m0.078s
-sys	0m0.410s
-
-real	0m5.220s
-user	0m0.066s
-sys	0m0.350s
-
-real	0m5.247s
-user	0m0.076s
-sys	0m0.332s
-
-real	0m5.474s
-user	0m0.071s
-sys	0m0.325s
-
-real	0m5.284s
+real	0m2.561s
 user	0m0.096s
-sys	0m0.511s
+sys	0m0.262s
 
-real	0m4.853s
-user	0m0.077s
-sys	0m0.339s
+real	0m2.518s
+user	0m0.117s
+sys	0m0.356s
 
-real	0m4.958s
-user	0m0.120s
-sys	0m0.563s
-
-real	0m4.855s
-user	0m0.063s
+real	0m2.523s
+user	0m0.068s
 sys	0m0.244s
 
-real	0m4.906s
-user	0m0.059s
-sys	0m0.361s
+real	0m2.516s
+user	0m0.060s
+sys	0m0.225s
 
-sha256sum 256MB*.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
-02e9f9ba0230e9f1a80e40b582b4ee0c601e231ca84e47f938b77155ac58e2e3  256MB_bin_output5.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output6.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output7.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output8.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output9.bin
+real	0m2.526s
+user	0m0.051s
+sys	0m0.197s
+
+real	0m2.744s
+user	0m0.068s
+sys	0m0.207s
+
+real	0m2.657s
+user	0m0.089s
+sys	0m0.401s
+
+real	0m2.724s
+user	0m0.067s
+sys	0m0.220s
+
+real	0m2.729s
+user	0m0.084s
+sys	0m0.266s
+
+real	0m2.789s
+user	0m0.050s
+sys	0m0.224s
+
+
+[msimiste@zone40-ta Assignment3]$ sha256sum 256MB*.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output0.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output1.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output2.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output3.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output4.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output5.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output6.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output7.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output8.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output9.bin
+
 
 
 Tests 31- 40
@@ -311,60 +382,60 @@ Encryption = aes128
 User Chosen Key: secretKey123459a
 Command = read
 
-for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.1.157:9998 aes128 secretKey123459a > 256MB_bin_output$i.bin; done
+for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.2.81:9998 aes128 notsosecret123 > 256MB_bin_output$i.bin; done
 
-real	0m7.760s
-user	0m1.180s
-sys	0m0.528s
+real	0m6.845s
+user	0m1.299s
+sys	0m0.553s
 
-real	0m7.930s
-user	0m1.210s
-sys	0m0.563s
-
-real	0m7.727s
-user	0m1.191s
-sys	0m0.458s
-
-real	0m7.915s
-user	0m1.203s
-sys	0m0.510s
-
-real	0m7.854s
-user	0m1.241s
-sys	0m0.513s
-
-real	0m7.828s
-user	0m1.243s
-sys	0m0.504s
-
-real	0m7.478s
-user	0m1.256s
-sys	0m0.481s
-
-real	0m7.555s
-user	0m1.214s
-sys	0m0.514s
-
-real	0m7.532s
-user	0m1.274s
-sys	0m0.571s
-
-real	0m7.488s
+real	0m6.161s
 user	0m1.206s
-sys	0m0.445s
+sys	0m0.511s
 
-Assignment3]$ sha256sum 256MB*.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
-f3c863b93058d0158d9d0b4dc702b01541c2c2a116632442ad04afbde7fc7105  256MB_bin_output5.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output6.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output7.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output8.bin
-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  256MB_bin_output9.bin
+real	0m6.095s
+user	0m1.212s
+sys	0m0.489s
+
+real	0m6.066s
+user	0m1.228s
+sys	0m0.552s
+
+real	0m6.135s
+user	0m1.243s
+sys	0m0.543s
+
+real	0m6.093s
+user	0m1.187s
+sys	0m0.434s
+
+real	0m6.096s
+user	0m1.187s
+sys	0m0.464s
+
+real	0m6.298s
+user	0m1.184s
+sys	0m0.432s
+
+real	0m6.369s
+user	0m1.171s
+sys	0m0.435s
+
+real	0m6.231s
+user	0m1.164s
+sys	0m0.479s
+[msimiste@zone40-ta Assignment3]$ sha256sum 256MB*.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output0.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output1.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output2.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output3.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output4.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output5.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output6.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output7.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output8.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output9.bin
+
 
 
 Tests 61- 70
@@ -824,40 +895,61 @@ Encryption = aes128
 User Chosen Key: secretKey123459a
 Command = write
 
-for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.1.157:9998 aes128 secretKey123459a < 256MB.bin; done
+for((i=0; i<10; i++)); do time python a3Client.py read 256MB.bin 172.19.2.81:9998 aes256 notsosecret123 > 256MB_bin_output$i.bin; done
 
-real	0m3.840s
-user	0m1.158s
-sys	0m0.305s
+real	0m7.014s
+user	0m1.481s
+sys	0m0.464s
 
-real	0m7.814s
-user	0m1.140s
-sys	0m0.401s
+real	0m6.993s
+user	0m1.506s
+sys	0m0.514s
 
-real	0m7.933s
-user	0m1.152s
-sys	0m0.404s
+real	0m6.678s
+user	0m1.490s
+sys	0m0.515s
 
-real	0m7.984s
-user	0m1.149s
-sys	0m0.396s
+real	0m7.036s
+user	0m1.513s
+sys	0m0.471s
 
-real	0m7.849s
-user	0m1.126s
-sys	0m0.339s
+real	0m7.028s
+user	0m1.526s
+sys	0m0.563s
 
-real	0m7.803s
-user	0m1.143s
-sys	0m0.365s
+real	0m7.144s
+user	0m1.458s
+sys	0m0.498s
 
-sha256sum 256MB*.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
-aa229a6431c3b34693b228e34127e41812cd29224d74c0ef3210cae6c5676f90  256MB_bin_output5.bin
+real	0m7.006s
+user	0m1.436s
+sys	0m0.464s
+
+real	0m6.894s
+user	0m1.471s
+sys	0m0.466s
+
+real	0m6.985s
+user	0m1.506s
+sys	0m0.507s
+
+real	0m6.861s
+user	0m1.489s
+sys	0m0.490s
+
+[msimiste@zone40-ta Assignment3]$ sha256sum 256MB*.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output0.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output1.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output2.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output3.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output4.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output5.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output6.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output7.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output8.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output9.bin
+
 
 
 Tests 151- 160
@@ -989,37 +1081,58 @@ Encryption = aes256
 User Chosen Key: secretKey123459a
 Command = write
 
-for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.1.157:9998 aes256 secretKey123459a < 256MB.bin; done
+for((i=0; i<10; i++)); do time python a3Client.py write 256MB_bin_output$i.bin 172.19.2.81:9998 aes256 notsosecret123 < 256MB.bin; done
 
-real	0m4.125s
-user	0m1.417s
-sys	0m0.331s
+real	0m4.123s
+user	0m1.472s
+sys	0m0.309s
 
-real	0m8.294s
-user	0m1.455s
-sys	0m0.290s
+real	0m5.737s
+user	0m1.454s
+sys	0m0.294s
 
-real	0m8.401s
-user	0m1.428s
-sys	0m0.372s
+real	0m5.858s
+user	0m1.441s
+sys	0m0.353s
 
-real	0m8.429s
-user	0m1.442s
-sys	0m0.293s
+real	0m5.962s
+user	0m1.437s
+sys	0m0.301s
 
-real	0m8.429s
-user	0m1.451s
-sys	0m0.370s
+real	0m5.934s
+user	0m1.463s
+sys	0m0.297s
 
-real	0m8.380s
-user	0m1.443s
-sys	0m0.392s
+real	0m5.853s
+user	0m1.429s
+sys	0m0.322s
 
-sha256sum 256MB*.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output0.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output1.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output2.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output3.bin
-8a0d1f51385d3c3f1c798e9e5a8998c96e6e5094b097f2c5d354fc2ecabdbeef  256MB_bin_output4.bin
-e2e0332ccc57fcb4012dc5f470ca6a57efb5426d2992ed2d600626ae7bbc08a0  256MB_bin_output5.bin
+real	0m6.380s
+user	0m1.426s
+sys	0m0.328s
+
+real	0m5.740s
+user	0m1.424s
+sys	0m0.315s
+
+real	0m5.823s
+user	0m1.412s
+sys	0m0.403s
+
+real	0m5.887s
+user	0m1.466s
+sys	0m0.294s
+
+
+sha256sum 256*.bin 
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output0.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output1.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output2.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output3.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output4.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output5.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output6.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output7.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output8.bin
+1e87c536c0ec309e125e87e9776dcc5f4bd7ac2590206f2dadae6670a66aa791  256MB_bin_output9.bin
