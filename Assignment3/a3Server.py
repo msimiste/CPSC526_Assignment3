@@ -4,6 +4,10 @@
 #StudentID: 10095107
 #Tutorial Section: T02
 
+#Name: Shivangi Gokani
+#Student ID: 10101523
+#Tutorial Section: T01
+
 
 import socket
 import signal
@@ -69,7 +73,7 @@ class a3Server(object):
             self.setCrypto()
             keyValid = True
             if(self.UseCipher):                               
-                keyValid = self.validateKey(cli)
+                keyValid = self.validateKey(cli)        #verify that client and server are using the same key
                 if(keyValid):
                     logMsg = ' New Client: ' + str(addr[0]) + ' crypto: ' + self.cipher + ' IV: ' + self.IV
                     self.loggingMessage(logMsg)
@@ -92,7 +96,6 @@ class a3Server(object):
         self.cipher = data
         cli.send('ack')
         data = cli.recv(BUFFER_SIZE,0)
-        #self.IV = b64decode(data)
         self.IV = data
         self.setCipher()
             
@@ -116,7 +119,7 @@ class a3Server(object):
     def executeCommand(self, cli):         
         data = ''
                 
-        if(self.READ):
+        if(self.READ):                                  #uploading a file to the client
             path = os.getcwd() + "/" + self.FILENAME
             tempTest = os.path.isfile(path)
             self.loggingMessage(' File exists: '+ str(tempTest))
@@ -144,16 +147,13 @@ class a3Server(object):
                     f.close()
                     cli.close()
                     
-        elif(not self.READ):
+        elif(not self.READ):                        #downloading a file from the client
             
             fileSize = cli.recv(BUFFER_SIZE,0)
             if(self.cipher.upper() <> "none".upper()):
-                fileSize = self.decryptor.decrypt(fileSize)
-            #print("line 152:" + str(fileSize))      
+                fileSize = self.decryptor.decrypt(fileSize)     
             s = os.statvfs('/')
-            sizeAvail = (s.f_bavail * s.f_frsize)  / 1024 
-            #print(sizeAvail)
-            #sizeAvail = 50           
+            sizeAvail = (s.f_bavail * s.f_frsize)  / 1024         
             hasSpace = (int(fileSize) < sizeAvail)
             if(hasSpace):
                 ack = "ack"
@@ -183,7 +183,9 @@ class a3Server(object):
         cli.close()            
         self.loggingMessage(' done')
         
-    def validateKey(self, cli):        
+    def validateKey(self, cli): 
+        #decrypts the data, remove the hash from the plaintext
+        #hashes the message and compares it with the server hash
         data = cli.recv(BUFFER_SIZE,0)
         data = self.decryptor.decrypt(data)            
         msgLength = len(data) - 32

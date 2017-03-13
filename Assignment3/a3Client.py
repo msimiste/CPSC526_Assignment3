@@ -4,6 +4,9 @@
 #StudentID: 10095107
 #Tutorial Section: T02
 
+#Name: Shivangi Gokani
+#Student ID: 10101523
+#Tutorial Section: T01
 
 import socket
 import sys  
@@ -106,6 +109,8 @@ def callServer():
         sendFile(cSock,client,filename)
 
 def verifyKey(cSock, client):
+    #generate a random message, hash it, append the hash to the message
+    #send the ecryption of the message and has to verify if client and server are using the same key
     hashTest = hashlib.md5()
     message = string.lowercase+string.digits+string.uppercase
     message = ''.join(random.sample(message,31)) 
@@ -116,7 +121,6 @@ def verifyKey(cSock, client):
     try:
         cSock.send(data)
         testData = cSock.recv(1024,0)
-        #print("Line 119: " + testData)
         testData = client.decryptor.decrypt(testData)        
         msgLength = len(testData) - 32
         msg = testData[:msgLength]        
@@ -134,6 +138,8 @@ def verifyKey(cSock, client):
             print("caught error")             
             
 def receiveFile(cSock, client):
+    #download a file from the server
+    #decrypt file and save file to disk
     if(client.UseCipher):        
         testAck = cSock.recv(1024,0)
         testAck = client.decryptor.decrypt(testAck)       
@@ -163,8 +169,8 @@ def receiveFile(cSock, client):
             keepGoing = False
             
 def sendFile(cSock,client,filename):
-    #path = os.getcwd() + "/" + filename
-    #fileSize = (str(os.path.getsize(path)))
+    #upload a file to the server
+    #encrypt file and send file to server
     tempFile = sys.stdin.read() 
     fileSize = str(len(tempFile))
     if(client.cipher.upper() <> "none".upper()):        
@@ -174,18 +180,14 @@ def sendFile(cSock,client,filename):
     data = cSock.recv(BUFFER_SIZE,0)
     if(client.UseCipher):
         data = client.decryptor.decrypt(data)   
-    ackHandler(cSock, data) 
-    #path = os.getcwd() + "/" + filename      
-    #s = os.statvfs('/')
-    #temp = (s.f_bavail * s.f_frsize)  / 1024
-    #print(temp)
-           
+    ackHandler(cSock, data)            
    
     if(client.cipher.upper() <> "none".upper()):        
         tempFile = client.encryptor.encrypt(tempFile)
     cSock.send(tempFile)
     
 def ackHandler(cSock,ack):   
+    #handle server responses
     if(ack.upper() == 'ack'.upper()):        
         return
     else:

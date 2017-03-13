@@ -4,6 +4,9 @@
 #StudentID: 10095107
 #Tutorial Section: T02
 
+#Name: Shivangi Gokani
+#Student ID: 10101523
+#Tutorial Section: T01
 
 import socket
 import sys  
